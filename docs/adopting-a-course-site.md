@@ -161,8 +161,18 @@ the repository has no such shortcodes.
   `class="cu-header"`.
 - `python build.py --pdf` succeeds (Typst is unaffected, but prove it). If it
   aborts within seconds on a Typst package such as `fontawesome` ("file not
-  found" under `.quarto/typst/packages`), the local Quarto cache is stale:
-  delete `site/.quarto` and rerun. On Windows, `build.py` can then die with a
+  found" under `.quarto/typst/packages`), delete `site/.quarto` and rerun.
+  The cache is not stale; the course's own `build.py` broke it. Its cleanup of
+  notebook-generated `.typ` files globs `**/*.typ` over the whole project,
+  which includes `.quarto/typst/packages`, and deletes every package `.typ`
+  (`lib.typ` and its siblings) because no `.qmd` sits beside it. Each
+  `build.py --pdf` run therefore strips the packages it just downloaded, the
+  next bundled-Typst compile fails on the first page that imports one, and
+  Quarto aborts the render there. Deleting `.quarto` works because the
+  packages are downloaded again before the cleanup runs, so expect the abort
+  to return after every PDF build until `build.py` excludes `.quarto/` and
+  `_extensions/` from that glob (PHYS-2150 and PHYS-4700 both carry the
+  pattern; fix it in its own PR). On Windows, `build.py` can die with a
   `charmap` encoding traceback while echoing that Typst error; set
   `PYTHONIOENCODING=utf-8` for the run. Neither is caused by the extension.
 - The render log shows `physicslabs: sidebar from _nav.yml (N entries, ...)`
@@ -215,7 +225,10 @@ Sites adopted on v0.1.0 need one more PR. From `site/`:
    `--profile typst` where `_quarto-typst.yml` exists) leaves the kept `.typ`
    next to the source, not in `_site/`. It must contain `course: "<title>"`
    and no line starting with `set math.equation(numbering`; delete it
-   afterwards. A built PDF must contain the string `Roboto` (grep its bytes).
+   afterwards. If that render ends with the bundled Typst failing on
+   `fontawesome` (step 9: a previous `build.py --pdf` deleted the package
+   sources), the `.typ` is still written and the check stands. A built PDF
+   must contain the string `Roboto` (grep its bytes).
 7. The deploy workflow's font copy (`assets/fonts` to the deploy branch, where
    present) can go; the platform serves the CI-built PDFs and never compiles
    Typst.
