@@ -1,0 +1,334 @@
+/**
+ * Code Block Styles
+ * Accessible syntax-highlighted code display with copy functionality
+ * WCAG 2.1 AA compliant with proper contrast and keyboard navigation
+ */
+
+/* ==========================================
+   Container Styles
+   ========================================== */
+
+.code-block-container {
+    margin: 2rem 0;
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--code-bg);
+    box-shadow: var(--shadow-sm);
+    /* Fix sub-pixel rendering artifacts at rounded corners */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Header with caption and language */
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--code-header-bg);
+    border-bottom: 1px solid var(--code-border);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.code-block-caption {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.code-block-language {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-sm);
+    /* Fix sub-pixel rendering artifacts at rounded corners */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* ==========================================
+   Code Wrapper & Content
+   ========================================== */
+
+.code-block-wrapper {
+    position: relative;
+    background: var(--code-content-bg);
+}
+
+.code-block-content {
+    overflow-x: auto;
+    background: var(--code-content-bg);
+}
+
+/* Pygments generated code styles */
+.code-block-content .code-highlight {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+/* Line number table layout */
+.code-block-content .code-highlight .linenos {
+    background: var(--code-header-bg);
+    color: var(--text-tertiary);
+    padding: 1rem 0.75rem;
+    text-align: right;
+    user-select: none;
+    border-right: 1px solid var(--code-border);
+    vertical-align: top;
+}
+
+.code-block-content .code-highlight .code {
+    padding: 1rem;
+    vertical-align: top;
+}
+
+/* Pre and code elements */
+.code-block-content pre {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    tab-size: 4;
+}
+
+.code-block-content code {
+    font-family: inherit;
+    background: transparent;
+    padding: 0;
+}
+
+/* ==========================================
+   Copy Button
+   ========================================== */
+
+.code-copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    z-index: 10;
+    box-shadow: var(--shadow-sm);
+}
+
+.code-copy-button:hover {
+    background: var(--btn-primary-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.code-copy-button:active {
+    transform: translateY(0);
+}
+
+.code-copy-button:focus {
+    outline: 3px solid var(--focus-outline-color);
+    outline-offset: 2px;
+}
+
+.code-copy-button .copy-icon {
+    font-size: 1rem;
+}
+
+/* Copied state */
+.code-copy-button.copied {
+    background: var(--color-success);
+}
+
+.code-copy-button.copied:hover {
+    background: var(--color-success-dark);
+}
+
+.code-copy-button .copied-text {
+    display: none;
+}
+
+.code-copy-button.copied .copy-text {
+    display: none;
+}
+
+.code-copy-button.copied .copied-text {
+    display: inline;
+}
+
+/* ==========================================
+   Syntax Highlighting (Pygments default theme)
+   ========================================== */
+
+/* Comments */
+.code-highlight .c { color: var(--syntax-comment); font-style: italic; }
+.code-highlight .cm { color: var(--syntax-comment); font-style: italic; }
+.code-highlight .cp { color: var(--syntax-preprocessor); }
+.code-highlight .c1 { color: var(--syntax-comment); font-style: italic; }
+.code-highlight .cs { color: var(--syntax-comment); }
+
+/* Errors */
+.code-highlight .err { border: 1px solid var(--syntax-error); }
+
+/* Keywords */
+.code-highlight .k { color: var(--syntax-keyword); font-weight: bold; }
+.code-highlight .kc { color: var(--syntax-keyword); font-weight: bold; }
+.code-highlight .kd { color: var(--syntax-keyword); font-weight: bold; }
+.code-highlight .kn { color: var(--syntax-keyword); font-weight: bold; }
+.code-highlight .kp { color: var(--syntax-keyword); }
+.code-highlight .kr { color: var(--syntax-keyword); font-weight: bold; }
+.code-highlight .kt { color: var(--syntax-type); }
+
+/* Operators */
+.code-highlight .o { color: var(--syntax-operator); }
+.code-highlight .ow { color: var(--syntax-keyword); font-weight: bold; }
+
+/* Names */
+.code-highlight .na { color: var(--syntax-string); }
+.code-highlight .nb { color: var(--syntax-namespace); }
+.code-highlight .nc { color: var(--syntax-namespace); font-weight: bold; }
+.code-highlight .no { color: var(--syntax-namespace); }
+.code-highlight .nd { color: var(--syntax-function); font-weight: bold; }
+.code-highlight .ni { color: var(--syntax-function); font-weight: bold; }
+.code-highlight .ne { color: var(--syntax-function); }
+.code-highlight .nf { color: var(--syntax-function); }
+.code-highlight .nl { color: var(--syntax-function); font-weight: bold; }
+.code-highlight .nn { color: var(--syntax-namespace); font-weight: bold; }
+.code-highlight .nt { color: var(--syntax-tag); font-weight: bold; }
+.code-highlight .nv { color: var(--syntax-variable); }
+
+/* Literals */
+.code-highlight .m { color: var(--syntax-number); }
+.code-highlight .mb { color: var(--syntax-number); }
+.code-highlight .mf { color: var(--syntax-number); }
+.code-highlight .mh { color: var(--syntax-number); }
+.code-highlight .mi { color: var(--syntax-number); }
+.code-highlight .mo { color: var(--syntax-number); }
+.code-highlight .s { color: var(--syntax-string); }
+.code-highlight .sb { color: var(--syntax-string); }
+.code-highlight .sc { color: var(--syntax-string); }
+.code-highlight .sd { color: var(--syntax-string); font-style: italic; }
+.code-highlight .s2 { color: var(--syntax-string); }
+.code-highlight .se { color: var(--syntax-string-escape); font-weight: bold; }
+.code-highlight .sh { color: var(--syntax-string); }
+.code-highlight .si { color: var(--syntax-string); font-style: italic; }
+.code-highlight .sx { color: var(--syntax-string); }
+.code-highlight .sr { color: var(--syntax-string-regex); }
+.code-highlight .s1 { color: var(--syntax-string); }
+.code-highlight .ss { color: var(--syntax-string); }
+
+/* Highlighted lines */
+.code-highlight .hll { background-color: var(--syntax-highlight-bg); }
+
+/* ==========================================
+   High Contrast Mode
+   ========================================== */
+
+@media (prefers-contrast: high) {
+    .code-block-container {
+        border-width: 2px;
+    }
+
+    .code-copy-button:focus {
+        outline-width: 4px;
+    }
+
+    .code-block-header {
+        font-weight: 700;
+    }
+}
+
+/* ==========================================
+   Responsive Design
+   ========================================== */
+
+@media (max-width: 768px) {
+    .code-block-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .code-copy-button {
+        position: static;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .code-block-content pre {
+        font-size: 0.85rem;
+    }
+}
+
+/* ==========================================
+   Print Styles
+   ========================================== */
+
+/* ==========================================
+   Injected Copy Button (docs/markdown pages)
+   Dynamically added by code-blocks.js for
+   code blocks outside the StreamField system.
+   ========================================== */
+
+.copy-btn-inline {
+    position: absolute;
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+    padding: var(--spacing-1) var(--spacing-2);
+    background: var(--bg-secondary);
+    border: var(--border-1) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: var(--font-xs);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    user-select: none;
+}
+
+.code-highlight:hover > .copy-btn-inline,
+pre:hover > .copy-btn-inline {
+    opacity: 1;
+}
+
+.copy-btn-inline:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+.copy-btn-inline.copied {
+    color: var(--color-success);
+}
+
+@media print {
+    .code-block-container {
+        border: 2px solid #000;
+        break-inside: avoid;
+    }
+
+    .code-copy-button,
+    .copy-btn-inline {
+        display: none;
+    }
+
+    .code-block-content pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+}
+

@@ -1,0 +1,7 @@
+/_site/
+/.quarto/
+/_physicslabs-sidebar.yml
+/.luarc.json
+__pycache__/
+
+**/*.quarto_ipynb

@@ -1,0 +1,58 @@
+---
+title: "Content Elements"
+pdf-download: true
+---
+
+## Callouts
+
+::: {.callout-note}
+## A titled note
+Body text inside a note.
+:::
+
+::: {.callout-tip collapse="true"}
+## A collapsed tip
+This body is hidden until the header is clicked.
+:::
+
+::: {.callout-warning}
+Untitled warning.
+:::
+
+## Code
+
+```python
+import numpy as np
+x = np.linspace(0, 1, 5)   # a comment
+print(x)
+```
+
+Inline code like `curve_fit` sits in prose.
+
+## Tables
+
+| Quantity | Symbol | Unit |
+|---|---|---|
+| Beam radius | $w$ | m |
+| Voltage | $V$ | V |
+
+: Two quantities {#tbl-quantities}
+
+@tbl-quantities is cross-referenced.
+
+## Math
+
+Inline $E = h\nu$ and display:
+
+$$ I(x) = \frac{I_0}{2}\left[1 - \operatorname{erf}\left(\frac{\sqrt{2}\,x}{w}\right)\right] $$ {#eq-knife}
+
+@eq-knife is the knife-edge model.
+
+## Task list
+
+- [ ] An unchecked item
+- [x] A checked item
+
+## Blockquote
+
+> A quotation set off from the text.

@@ -1,0 +1,61 @@
+/*-- scss:defaults --*/
+
+$body-bg: #222222;
+$body-color: #bbbbbb;
+// $link-color won't work here — custom.scss is loaded earlier in the
+// dark theme array and Quarto gives earlier defaults priority.
+// Link color is overridden via scss:rules below instead.
+
+/*-- scss:rules --*/
+
+// Keep top header row black in dark mode
+.cu-header-row {
+  background-color: #000000;
+}
+
+// Links — CU gold in dark mode (8.3:1 contrast on #222)
+a {
+  color: #CFB87C;
+
+  &:hover {
+    color: lighten(#CFB87C, 12%);
+  }
+}
+
+// Sidebar TOC — gold highlight on active + hover
+#quarto-margin-sidebar .nav-link.active,
+nav[role="doc-toc"] .nav-link.active,
+nav.toc-active .nav-link.active {
+  color: #CFB87C !important;
+  border-left-color: #CFB87C !important;
+}
+
+#quarto-margin-sidebar .nav-link:hover,
+nav[role="doc-toc"] .nav-link:hover,
+nav.toc-active .nav-link:hover {
+  color: #CFB87C !important;
+}
+
+// Scrollbars — light thumb on dark background
+pre, div.sourceCode, .math.display, figure {
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+pre::-webkit-scrollbar-thumb,
+div.sourceCode::-webkit-scrollbar-thumb,
+.math.display::-webkit-scrollbar-thumb,
+figure::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+// Give figures a white background so transparent PNGs/SVGs stay readable
+.quarto-figure img,
+.quarto-float img,
+figure img {
+  background-color: #ffffff;
+  border-radius: 4px;
+}

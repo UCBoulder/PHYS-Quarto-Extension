@@ -1,0 +1,15 @@
+# Fixture site: renders with the extension from ./_extensions so that a change
+# to the extension (or a synced platform stylesheet) is exercised in CI and can
+# be previewed here with `quarto preview`.
+project:
+  type: physicslabs
+  output-dir: _site
+
+website:
+  title: "Fixture Course"
+
+physicslabs:
+  title: "Fixture Course"
+  nav:
+    - label: "Python Resources"
+      href: "https://physicslabs.colorado.edu/courses/python/"

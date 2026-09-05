@@ -1,0 +1,180 @@
+<script>
+(function () {
+  // Bridge to the platform's stylesheets: they scope a few rules to a
+  // `quarto-content` body class and switch dark mode on html[data-theme].
+  document.body.classList.add('quarto-content');
+
+  // Move the header, nav bar and footer out of Quarto's grid so they run full width.
+  var quartoContent = document.getElementById('quarto-content');
+  var header = document.querySelector('.cu-header');
+  var headerNav = document.querySelector('.cu-header-nav');
+  var footer = document.querySelector('.cu-footer');
+  if (quartoContent && quartoContent.parentNode) {
+    if (header) quartoContent.parentNode.insertBefore(header, quartoContent);
+    if (headerNav) quartoContent.parentNode.insertBefore(headerNav, quartoContent);
+    if (footer) quartoContent.parentNode.insertBefore(footer, quartoContent.nextSibling);
+  }
+
+  // Navigation sidebar toggle for narrow screens. Quarto's own toggle lives in
+  // a secondary nav bar that the chrome hides; this one drives the same
+  // Bootstrap collapse target from our nav bar's left slot.
+  var sidebar = document.getElementById('quarto-sidebar');
+  var navStart = document.querySelector('.cu-header-nav-start');
+  if (sidebar && navStart) {
+    var t = document.createElement('a');
+    t.href = '#';
+    t.className = 'cu-header-home-btn cu-sidebar-toggle';
+    t.setAttribute('role', 'button');
+    t.setAttribute('data-bs-toggle', 'collapse');
+    t.setAttribute('data-bs-target', '.quarto-sidebar-collapse-item');
+    t.setAttribute('aria-controls', 'quarto-sidebar');
+    t.setAttribute('aria-expanded', 'false');
+    t.setAttribute('aria-label', 'Toggle course navigation');
+    t.title = 'Course navigation';
+    t.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+    t.addEventListener('click', function (e) { e.preventDefault(); });
+    navStart.appendChild(t);
+  }
+
+  // Active state for pages that are not listed in _nav.yml (the platform does
+  // the same): mark the sidebar entry whose path is the longest prefix of this
+  // page's path, and expand the sections above it.
+  function markNearestNavEntry() {
+    if (!sidebar || sidebar.querySelector('.sidebar-link.active')) return;
+    var here = location.pathname.replace(/index\.html$/, '');
+    var best = null, bestLen = 0;
+    var links = sidebar.querySelectorAll('a.sidebar-link[href]');
+    for (var k = 0; k < links.length; k++) {
+      var p;
+      try { p = new URL(links[k].getAttribute('href'), location.href).pathname.replace(/index\.html$/, ''); } catch (e) { continue; }
+      if (p && p !== here && here.indexOf(p) === 0 && p.length > bestLen) { best = links[k]; bestLen = p.length; }
+    }
+    if (!best) return;
+    best.classList.add('active');
+    best.setAttribute('aria-current', 'location');
+    var section = best.closest('ul.sidebar-section');
+    while (section) {
+      section.classList.add('show');
+      var toggle = sidebar.querySelector('[data-bs-target="#' + section.id + '"]');
+      if (toggle) { toggle.classList.remove('collapsed'); toggle.setAttribute('aria-expanded', 'true'); }
+      section = section.parentElement ? section.parentElement.closest('ul.sidebar-section') : null;
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', markNearestNavEntry);
+  else markNearestNavEntry();
+
+  // Home links resolve to the site root from nested pages.
+  var offset = document.querySelector('meta[name="quarto:offset"]');
+  var base = offset ? offset.getAttribute('content') : './';
+  var homeLink = document.getElementById('cu-header-home-link');
+  if (homeLink) homeLink.href = base + 'index.html';
+  var homeBtn = document.getElementById('cu-header-home-btn');
+  if (homeBtn) homeBtn.href = base + 'index.html';
+
+  // Keep the toggle icons, the logo and the platform's data-theme in step with Quarto's scheme.
+  var logo = document.getElementById('cu-header-logo');
+  function sync() {
+    var toggle = document.querySelector('.cu-header-nav .quarto-color-scheme-toggle');
+    var isDark = !!(toggle && toggle.classList.contains('alternate'));
+    if (!isDark) {
+      try { isDark = localStorage.getItem('quarto-color-scheme') === 'alternate'; } catch (e) {}
+    }
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    if (toggle) {
+      toggle.querySelector('.cu-icon-moon').style.display = isDark ? 'none' : 'block';
+      toggle.querySelector('.cu-icon-sun').style.display = isDark ? 'block' : 'none';
+    }
+    if (logo) logo.src = isDark ? logo.getAttribute('data-logo-dark') : logo.getAttribute('data-logo-light');
+  }
+  sync();
+  document.addEventListener('DOMContentLoaded', sync);
+  var orig = window.quartoToggleColorScheme;
+  if (orig) {
+    window.quartoToggleColorScheme = function () { orig(); setTimeout(sync, 50); };
+  }
+
+  // Code copy buttons, added the way the platform's quarto-content.js adds them
+  // and styled by the platform's .quarto-copy-btn rules. Quarto's own button is
+  // turned off in the extension (code-copy: false) so there is exactly one.
+  function copyText(text, done) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done);
+      return;
+    }
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    done();
+  }
+  function attachCopyButton(pre, container) {
+    var b = document.createElement('button');
+    b.className = 'quarto-copy-btn';
+    b.setAttribute('aria-label', 'Copy code to clipboard');
+    b.setAttribute('title', 'Copy');
+    b.textContent = 'Copy';
+    b.addEventListener('click', function (e) {
+      var codeEl = pre.querySelector('code');
+      var code = codeEl ? codeEl.textContent : pre.textContent;
+      var button = e.currentTarget;
+      copyText(code, function () {
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        setTimeout(function () {
+          button.textContent = 'Copy';
+          button.classList.remove('copied');
+        }, 2000);
+      });
+    });
+    container.style.position = 'relative';
+    container.appendChild(b);
+  }
+  var wrapped = document.querySelectorAll('div.sourceCode > pre');
+  for (var i = 0; i < wrapped.length; i++) {
+    if (!wrapped[i].parentNode.querySelector('.quarto-copy-btn')) attachCopyButton(wrapped[i], wrapped[i].parentNode);
+  }
+  var bare = document.querySelectorAll('main.content pre[class]:not(.sourceCode)');
+  for (var j = 0; j < bare.length; j++) {
+    if (!bare[j].querySelector('.quarto-copy-btn')) attachCopyButton(bare[j], bare[j]);
+  }
+
+  // Back-to-top button.
+  var btn = document.querySelector('.cu-back-to-top');
+  if (btn) {
+    window.addEventListener('scroll', function () {
+      btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    btn.addEventListener('click', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  }
+
+  // Mobile TOC: clone the sidebar TOC into the nav bar (shown below 992px by CSS).
+  var tocNav = document.querySelector('nav#TOC');
+  var navActions = document.querySelector('.cu-header-actions');
+  if (tocNav && navActions) {
+    var tocList = tocNav.querySelector('ul');
+    if (tocList) {
+      var details = document.createElement('details');
+      details.className = 'cu-mobile-toc';
+      var summary = document.createElement('summary');
+      summary.innerHTML = '<span class="cu-toc-label"><svg class="cu-toc-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg> Contents</span>';
+      details.appendChild(summary);
+      var nav = document.createElement('nav');
+      nav.setAttribute('aria-label', 'Table of contents');
+      nav.appendChild(tocList.cloneNode(true));
+      details.appendChild(nav);
+      navActions.insertBefore(details, navActions.firstChild);
+      details.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') details.removeAttribute('open');
+      });
+    }
+  }
+})();
+</script>

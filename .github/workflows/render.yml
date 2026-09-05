@@ -1,0 +1,38 @@
+name: Render fixture
+
+# Renders the fixture site at the repository root with the extension in
+# ./_extensions, on the Quarto release the course sites pin. A platform
+# stylesheet change that breaks the bridge, or a filter error, fails here
+# rather than in a course repository.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: "1.9.38"
+
+      - name: Render
+        run: quarto render --to html
+
+      - name: Check the output
+        run: |
+          set -e
+          test -f _site/index.html
+          test -f _site/guide/elements.html
+          grep -q 'class="cu-header"' _site/index.html
+          grep -q 'id="quarto-sidebar"' _site/index.html
+          grep -q 'quarto-bridge.css' _site/guide/elements.html
+          ! grep -rq 'code-copy-button' _site/guide/elements.html
+          echo "fixture rendered with chrome, sidebar and bridge stylesheet"

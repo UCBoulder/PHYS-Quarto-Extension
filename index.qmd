@@ -1,0 +1,11 @@
+---
+title: "Fixture Course"
+---
+
+This site exists to render the `physicslabs` extension. Every element the
+platform styles should appear somewhere under [Guide](guide/index.qmd), so a
+rendering regression shows up here before it reaches a course site.
+
+## Sections number themselves
+
+Body headings start at `##`; the page title is the H1.

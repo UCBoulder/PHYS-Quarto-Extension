@@ -1,0 +1,7 @@
+# Fixture navigation in the platform's _nav.yml shape.
+nav:
+  - label: "Guide"
+    path: "guide/"
+    children:
+      - label: "Content Elements"
+        path: "guide/elements"

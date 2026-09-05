@@ -1,0 +1,899 @@
+// Physics Labs chrome: header, nav bar, sidebar TOC, footer, and Quarto layout fixes.
+// Content styling (headings, callouts, code, tables, figures, math) comes from the
+// platform's own stylesheets in ../css/, copied verbatim, so it is not repeated here.
+
+/*-- scss:defaults --*/
+
+// CU Boulder brand colors
+$cu-gold: #CFB87C;
+$cu-black: #000000;
+$cu-dark-gray: #565A5C;
+$cu-light-gold: #F3F0E9;
+$cu-link-blue: #096FAE;
+
+// Bootstrap overrides
+$link-color: $cu-link-blue;
+$link-decoration: none;
+$font-family-sans-serif: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+/*-- scss:rules --*/
+
+// CSS custom properties for use outside SCSS
+:root {
+  --cu-gold: #{$cu-gold};
+  --cu-black: #{$cu-black};
+  --cu-dark-gray: #{$cu-dark-gray};
+  --cu-light-gold: #{$cu-light-gold};
+  --cu-link-blue: #{$cu-link-blue};
+  --header-height: 44px;
+}
+
+// ============================================
+// Page layout — sticky footer
+// Header and footer are moved outside #quarto-content by JS.
+// Body flex column pushes footer to bottom on short pages.
+// ============================================
+
+// Sticky footer: body flex column, footer margin-top auto absorbs remaining space.
+// Override Quarto's .quarto-container { min-height: calc(100vh - 132px) }
+// which forces the content area to fill the viewport.
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.quarto-container {
+  min-height: auto !important;
+}
+
+// ============================================
+// Header — three-row CU Boulder header
+// Row 1 (#000): CU logo
+// Row 2 (#000): Title + subtitle
+// Nav bar (#1a1a1a): Home + theme toggle (+ mobile TOC)
+// Gold 3px border at the bottom of the nav bar
+// JS moves header + nav bar before #quarto-content
+// ============================================
+
+.cu-header {
+  display: flex;
+  flex-direction: column;
+  background-color: $cu-black;
+}
+
+// Row 1: CU logo
+.cu-header-row {
+  padding: 8px 24px;
+}
+
+.cu-header-row-inner {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cu-header .cu-logo img {
+  height: 22px;
+  display: block;
+}
+
+// Row 2: title + subtitle
+.cu-header-title {
+  padding: 12px 24px 14px;
+}
+
+.cu-header-title-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cu-header-h1 {
+  font-size: 30px;
+  font-weight: 750;
+  margin: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cu-header-h1 a {
+  font-family: "Roboto Condensed", "Roboto", sans-serif;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.cu-header-h1 a:hover {
+  color: #ffffff;
+}
+
+.cu-header-subtitle {
+  font-family: "Roboto Condensed", "Roboto", sans-serif;
+  color: #999999;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 2px 0 0;
+}
+
+// ============================================
+// Nav bar — #1a1a1a row below header
+// Left: home button + mobile TOC toggle
+// Right: theme toggle
+// Fixed 44px height so mobile TOC doesn't stretch it.
+// Sticky so it stays visible when scrolling.
+// ============================================
+
+.cu-header-nav {
+  background-color: #1a1a1a;
+  border-bottom: 4px solid $cu-gold;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  height: 44px;
+}
+
+.cu-header-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+}
+
+// Left slot: home + mobile TOC side by side
+// align-self: stretch overrides the parent's align-items: center
+// so this div fills the full 44px bar height, letting its own
+// align-items: center vertically center the children.
+.cu-header-nav-start {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 4px;
+}
+
+// Right slot: theme toggle
+.cu-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cu-header-nav .cu-header-home-btn {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.cu-header-nav .cu-header-home-btn:hover {
+  color: #ffffff;
+}
+
+.cu-header-nav .quarto-color-scheme-toggle {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.cu-header-nav .quarto-color-scheme-toggle:hover {
+  color: #ffffff;
+}
+
+// SVG toggle icons — moon in light, sun in dark (JS syncs via .alternate class)
+.cu-icon-sun {
+  display: none;
+}
+
+.cu-icon-moon {
+  display: block;
+}
+
+// Hide Quarto's own color-scheme toggles (our nav bar already has one): the
+// floating fallback, and the one it adds to the sidebar header.
+body > a.quarto-color-scheme-toggle.top-right,
+#quarto-sidebar .sidebar-tools-main {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .cu-header-row {
+    padding: 8px 12px;
+  }
+
+  .cu-header-title {
+    padding: 10px 12px 12px;
+  }
+
+  .cu-header-h1 {
+    font-size: 18px;
+  }
+
+  .cu-header .cu-logo img {
+    height: 18px;
+  }
+
+  .cu-header-nav-inner {
+    padding: 0 12px;
+  }
+}
+
+// ============================================
+// Mobile TOC — inline in the nav bar
+// Hidden on desktop where the sidebar TOC is visible.
+// On mobile (<992px): appears as a toggle in the nav bar left slot.
+// Dropdown overlays content below the sticky nav bar.
+// ============================================
+
+.cu-mobile-toc {
+  display: none; // hidden on desktop
+  margin: 0; // override Quarto's `details { margin-bottom: 1em }`
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+
+    // Strip all browser-default summary markers
+    &::marker,
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  // Inner span — this is what we actually style for centering.
+  // <summary> has browser-internal rendering that fights flexbox,
+  // but a plain <span> inside it works perfectly.
+  .cu-toc-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+
+  .cu-toc-chevron {
+    color: $cu-gold;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  &[open] .cu-toc-chevron {
+    transform: rotate(90deg);
+  }
+
+  // Dropdown overlays content — positioned relative to the nav bar
+  nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 44px;
+    padding: 8px 24px 12px;
+    background: #1a1a1a;
+    max-height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    display: block;
+    padding: 8px 0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    &:hover {
+      color: $cu-gold;
+    }
+  }
+
+  li:last-child a {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .cu-mobile-toc {
+    display: block;
+  }
+
+  // Hide Quarto's sidebar TOC when mobile TOC is visible
+  #quarto-margin-sidebar {
+    display: none !important;
+  }
+
+  // Collapse the sidebar grid tracks so content fills the full width.
+  // Quarto's default 768–991px grid still reserves ~200px for the hidden
+  // sidebar. This override merges all named lines into a single fluid
+  // track, matching what Quarto already does below 768px.
+  body .page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start]
+      minmax(0px, 1fr)
+      [body-content-end body-end body-end-outset page-end-inset page-end screen-end-inset]
+      1.5em
+      [screen-end] !important;
+  }
+}
+
+// ============================================
+// Sidebar TOC — clear the sticky nav bar (44px + 4px border)
+// ============================================
+
+.sidebar.margin-sidebar {
+  top: 48px !important;
+  max-height: calc(100vh - 48px) !important;
+}
+
+// Docked navigation sidebar (built from _nav.yml) — same offset as the TOC
+#quarto-sidebar.sidebar-navigation.docked {
+  top: 48px !important;
+  max-height: calc(100vh - 48px) !important;
+}
+
+
+// Anchor offset — clear sticky nav bar (48px) + breathing room
+section[id],
+.quarto-figure[id],
+.quarto-float[id],
+figure[id],
+span[id^="eq-"],
+div[id^="eq-"] {
+  scroll-margin-top: 60px;
+}
+
+
+// Figures with fixed-size images: scroll when wider than container
+figure {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+
+// Center figure captions under figures
+figcaption {
+  text-align: center;
+}
+
+// Prevent right-aligned PDF column from wrapping on mobile
+table td:last-child {
+  white-space: nowrap;
+}
+
+// ============================================
+// Inline code and links — allow wrapping on narrow screens
+// ============================================
+
+code, a {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+
+// ============================================
+// Tables — horizontal scroll when content overflows
+// ============================================
+
+table {
+  width: 100%;
+}
+
+// Scroll container: the parent of any table scrolls when the table overflows.
+// The table itself stays display:table for proper full-width rendering.
+:has(> table) {
+  overflow-x: auto;
+}
+
+// Rounded corners on embedded iframes (Google Forms, etc.)
+iframe {
+  border-radius: 8px;
+}
+
+// ============================================
+// Display math — horizontal scroll for wide equations
+// Problem: Quarto's CSS Grid gives grid items implicit min-width: auto,
+// so wide MathJax equations push the entire page wider on mobile.
+// Quarto also wraps numbered equations in inline <span> elements:
+//   <p><span id="eq-..."><span class="math display"><mjx-container>
+// The inline spans break the max-width chain.
+//
+// Fix: (1) min-width: 0 on the grid item so it respects column width,
+//      (2) block-ify the wrapper spans so max-width propagates,
+//      (3) overflow-x: auto on .math.display for per-equation scroll.
+// ============================================
+
+// Allow grid items to shrink below their content width
+#quarto-document-content {
+  min-width: 0;
+}
+
+// Numbered equation wrappers: make block so max-width resolves
+.math.display {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+// The <span id="eq-..."> around numbered equations
+span[id^="eq-"] {
+  display: block;
+  max-width: 100%;
+}
+
+// MathJax container: let it render at natural width inside the
+// scrollable .math.display wrapper. No overflow-x here — that would
+// create a second (duplicate) scrollbar.
+mjx-container {
+  max-width: none;
+}
+
+// ============================================
+// Scrollbars — slim, themed for code blocks and math overflow
+// ============================================
+
+// Firefox
+pre, div.sourceCode, .math.display, figure {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+// Webkit (Chrome, Safari, Edge)
+pre::-webkit-scrollbar,
+div.sourceCode::-webkit-scrollbar,
+.math.display::-webkit-scrollbar,
+figure::-webkit-scrollbar {
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-track,
+div.sourceCode::-webkit-scrollbar-track,
+.math.display::-webkit-scrollbar-track,
+figure::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb,
+div.sourceCode::-webkit-scrollbar-thumb,
+.math.display::-webkit-scrollbar-thumb,
+figure::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.35);
+  }
+}
+
+
+// ============================================
+// Back-to-top button — floating bottom-right
+// ============================================
+
+.cu-back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  padding: 0 !important;
+  border: none;
+  border-radius: 50%;
+  background-color: $cu-gold;
+  color: $cu-black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &:hover {
+    background-color: darken($cu-gold, 8%);
+  }
+}
+
+// ============================================
+// Footer — full-width banner, 1200px content
+// JS moves this after #quarto-content
+// ============================================
+
+.cu-footer {
+  background-color: $cu-black;
+  border-top: 4px solid $cu-gold;
+  padding: 24px 32px;
+  margin-top: auto; // push to viewport bottom on short pages
+  flex-shrink: 0;
+}
+
+.cu-footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cu-footer-info {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.cu-footer-info strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cu-footer-brand {
+  text-align: right;
+}
+
+.cu-footer-brand img {
+  height: 32px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.cu-footer-brand-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .cu-footer {
+    padding: 16px 12px;
+  }
+
+  .cu-footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .cu-footer-brand {
+    text-align: left;
+  }
+}
+
+// ============================================
+// Skip link — visually hidden until focused (WCAG 2.4.1)
+// ============================================
+
+.cu-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 1001;
+  background: $cu-gold;
+  color: $cu-black;
+  font-weight: 700;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-size: 0.95rem;
+
+  &:focus {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+// ============================================
+// Focus indicators — gold outline on nav bar elements (WCAG 2.4.7)
+// ============================================
+
+.cu-header-home-btn,
+.cu-header-nav .quarto-color-scheme-toggle,
+.cu-mobile-toc summary,
+.cu-back-to-top {
+  &:focus-visible {
+    outline: 2px solid $cu-gold;
+    outline-offset: 2px;
+  }
+}
+
+// ============================================
+// Reduced motion — disable animations (WCAG 2.3.3)
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-toc-chevron {
+    transition-duration: 0.01ms !important;
+  }
+
+  .cu-back-to-top {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ============================================
+// Resources dropdown (optional physicslabs.nav entries)
+// ============================================
+// Resources dropdown — always visible in the nav bar
+.cu-resources-dropdown {
+  position: relative;
+  margin: 0;
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+
+    &::marker,
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .cu-dropdown-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+
+  .cu-dropdown-chevron {
+    color: $cu-gold;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  &[open] .cu-dropdown-chevron {
+    transform: rotate(90deg);
+  }
+
+  nav {
+    position: absolute;
+    left: 0;
+    top: 46px;
+    min-width: 220px;
+    padding: 4px 0;
+    background: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    max-height: 60vh;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
+
+    &:hover {
+      color: $cu-gold;
+    }
+  }
+
+  li:last-child a {
+    border-bottom: none;
+  }
+}
+
+// ============================================
+// Navigation sidebar on mobile
+// Quarto renders a secondary nav bar with a sidebar toggle below 992px. Our
+// nav bar already has the slot for it, so the after-body script adds a toggle
+// there (same Bootstrap collapse target) and Quarto's bar is hidden.
+// ============================================
+
+.quarto-secondary-nav {
+  display: none !important;
+}
+
+// Specificity matches `.cu-header-nav .cu-header-home-btn`, whose display: flex
+// the toggle inherits by sharing that class.
+.cu-header-nav .cu-sidebar-toggle {
+  display: none; // hidden on desktop, where the sidebar is docked
+}
+
+@media (max-width: 991.98px) {
+  .cu-header-nav .cu-sidebar-toggle {
+    display: flex;
+  }
+}
+
+// ============================================
+// Navigation sidebar — match the platform's course sidebar
+// Source rules: components.css (.docs-sidebar, .docs-section-title,
+// .docs-nav-link) and quarto-content.css (.course-sidebar-header). Colors are
+// the platform's variables, so dark mode follows html[data-theme].
+// ============================================
+
+nav.sidebar.sidebar-navigation:not(.rollup),
+div.sidebar.sidebar-navigation.rollup.quarto-sidebar-toggle-contents {
+  background-color: transparent;
+  border-right: none !important;
+}
+
+#quarto-sidebar.sidebar-navigation {
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+
+  > * {
+    padding-top: 0.75rem; // Quarto: 1em on every child
+  }
+
+  // Course header: site name linking home, rule beneath
+  .sidebar-header {
+    padding-bottom: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
+    border-bottom: var(--border-1) solid var(--border-color-light);
+  }
+
+  .sidebar-title {
+    margin-top: 0;
+    padding-bottom: 0;
+    font-family: var(--font-family-base);
+    font-size: var(--font-base);
+    line-height: 1.4;
+    font-weight: var(--font-weight-bold);
+
+    > a {
+      color: var(--text-primary);
+
+      &:hover {
+        color: var(--color-link);
+      }
+    }
+
+    .sidebar-tools-main {
+      margin-top: 0;
+    }
+  }
+
+  // Section titles (platform .docs-section-title)
+  li.sidebar-item-section > .sidebar-item-container {
+    color: var(--text-primary);
+    align-items: center;
+
+    > a.sidebar-link {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      padding: var(--spacing-1) 0;
+      transition: color var(--transition-base);
+
+      &:hover,
+      &:focus-visible {
+        color: var(--color-link);
+      }
+    }
+
+    .sidebar-item-toggle {
+      color: var(--docs-sidebar-expand-icon-color);
+
+      .bi {
+        font-size: 0.85em;
+      }
+    }
+  }
+
+  // Page links (platform .docs-nav-link)
+  .sidebar-section {
+    padding-left: var(--spacing-2);
+    padding-bottom: var(--spacing-1);
+  }
+
+  div.sidebar-item-container {
+    color: var(--text-secondary);
+
+    &:hover,
+    &:focus {
+      color: var(--color-link);
+    }
+  }
+
+  .sidebar-section a.sidebar-link {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: normal;
+    color: var(--text-secondary);
+    padding: var(--spacing-1) var(--spacing-2);
+    transition: color var(--transition-base);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-link);
+    }
+
+    &.active {
+      color: var(--color-link);
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+
+  div.sidebar-item-container .active {
+    color: var(--color-link);
+  }
+}
+
+// Below 992px the sidebar is Quarto's slide-in panel, so it needs an opaque
+// surface again (the docked form above sits on the page background).
+@media (max-width: 991.98px) {
+  nav.sidebar.sidebar-navigation:not(.rollup) {
+    background-color: var(--bg-primary);
+    border-right: var(--border-1) solid var(--border-color-light) !important;
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+    padding-left: var(--spacing-3);
+  }
+}

@@ -1,0 +1,7 @@
+---
+title: "Guide"
+---
+
+## Pages in this section
+
+- [Content Elements](elements.qmd) exercises callouts, code, tables, math, figures and cross-references.

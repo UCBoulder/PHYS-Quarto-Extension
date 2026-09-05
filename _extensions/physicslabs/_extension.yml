@@ -1,0 +1,44 @@
+title: Physics Labs
+author: CU Boulder Physics Undergraduate Laboratories
+version: 0.1.0
+quarto-required: ">=1.9.0"
+contributes:
+  project:
+    project:
+      type: website
+      # Builds the docked sidebar from the platform's _nav.yml on every render.
+      pre-render:
+        - nav-to-sidebar.py
+    # Written by the pre-render script; ignore it in version control.
+    metadata-files:
+      - _physicslabs-sidebar.yml
+    website:
+      navbar: false
+    lang: en
+    date-format: "MMMM D, YYYY"
+    toc: true
+    toc-depth: 3
+    format-links: false
+    format:
+      html:
+        theme:
+          light: [cosmo, scss/light.scss, scss/chrome.scss]
+          dark: [darkly, scss/chrome.scss, scss/dark.scss]
+        css:
+          - css/theme-consolidated.css
+          - css/quarto-content.css
+          - css/section-numbering.css
+          - css/code-blocks.css
+          - css/tables.css
+          - css/figures.css
+          - css/equations.css
+          - css/cross-references.css
+          - css/quarto-bridge.css
+        include-in-header: html/head.html
+        include-after-body: html/after-body.html
+        filters:
+          - filters/chrome.lua
+        number-sections: true
+        link-external-newwindow: true
+        # The after-body script adds the platform's copy button instead.
+        code-copy: false
