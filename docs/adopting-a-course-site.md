@@ -171,8 +171,11 @@ the repository has no such shortcodes.
   Quarto aborts the render there. Deleting `.quarto` works because the
   packages are downloaded again before the cleanup runs, so expect the abort
   to return after every PDF build until `build.py` excludes `.quarto/` and
-  `_extensions/` from that glob (PHYS-2150 and PHYS-4700 both carry the
-  pattern; fix it in its own PR). On Windows, `build.py` can die with a
+  `_extensions/` from that glob. Only PHYS-2150 carried the pattern (fixed in
+  its PR #78); the other course repositories' scans already skip those
+  directories, or only filter the list rather than delete. If a repository
+  shows the abort, check its scan before assuming a cache problem. On Windows,
+  `build.py` can die with a
   `charmap` encoding traceback while echoing that Typst error; set
   `PYTHONIOENCODING=utf-8` for the run. Neither is caused by the extension.
 - The render log shows `physicslabs: sidebar from _nav.yml (N entries, ...)`
