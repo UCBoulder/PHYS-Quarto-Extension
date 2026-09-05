@@ -39,6 +39,8 @@ jobs:
           grep -q 'quarto-bridge.css' _site/guide/elements.html
           ! grep -rq 'code-copy-button' _site/guide/elements.html
           test -f _site/guide/elements.pdf
+          ! grep -aq 'RobotoCondensed' _site/guide/elements.pdf
+          grep -aq 'Roboto-Regular' _site/guide/elements.pdf
           grep -q 'course: "Fixture Course"' guide/elements.typ
           ! grep -qE '^\s*set math\.equation\(numbering' guide/elements.typ
           echo "fixture rendered with chrome, sidebar, bridge stylesheet, and stamped PDFs"

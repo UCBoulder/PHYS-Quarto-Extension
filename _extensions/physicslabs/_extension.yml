@@ -1,6 +1,6 @@
 title: Physics Labs
 author: CU Boulder Physics Undergraduate Laboratories
-version: 0.2.0
+version: 0.2.1
 quarto-required: ">=1.9.0"
 contributes:
   project:
@@ -48,6 +48,9 @@ contributes:
         template-partials:
           - typst/typst-template.typ
           - typst/typst-show.typ
+        # Roboto only. The Roboto Condensed faces register in Typst under the
+        # family "Roboto" at normal stretch, so shipping them made Linux runners
+        # pick Condensed for body text. HTML gets Condensed from Google Fonts.
         font-paths:
           - fonts
         mainfont: "Roboto"

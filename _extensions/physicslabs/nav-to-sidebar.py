@@ -112,8 +112,10 @@ def resolve_href(path: str | None, project_dir: Path, missing: list[str]) -> str
     p = path.strip().strip("/")
     if p == "":
         return "index.qmd"
+    # A page file wins even when a directory of the same name sits beside it
+    # (PHYS-2150 has resources/instruments.qmd next to resources/instruments/).
     for suffix in PAGE_SUFFIXES:
-        if (project_dir / p).with_suffix(suffix).is_file() and not (project_dir / p).is_dir():
+        if (project_dir / f"{p}{suffix}").is_file():
             return f"{p}{suffix}"
     for suffix in PAGE_SUFFIXES:
         if (project_dir / p / f"index{suffix}").is_file():

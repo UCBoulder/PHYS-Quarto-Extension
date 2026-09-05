@@ -238,4 +238,14 @@ Sites adopted on v0.1.0 need one more PR. From `site/`:
    PDF-styling notes in `site/CLAUDE.md`, and the directory tree in
    `site/README.md`. Copy PHYS-4700's "PDFs use the extension too" bullet.
 
+### v0.2.1: install this rather than v0.2.0
+
+v0.2.0 shipped the Roboto Condensed faces alongside Roboto. Typst files them
+under the family "Roboto" at normal stretch, so on a Linux runner every
+CI-built PDF was set in Condensed, and had been since the course repositories
+first bundled those files. v0.2.1 ships Roboto only. Expect live PDFs to
+re-wrap wider and gain pages after the first CI build on it; that is the
+correction, not a regression. It also fixes the sidebar script rejecting a
+page that has a same-named directory beside it.
+
 Update this document when a step turns out to be wrong.

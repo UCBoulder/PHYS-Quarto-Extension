@@ -1,0 +1,1266 @@
+/**
+ * CONSOLIDATED THEME VARIABLES
+ * Single Source of Truth for ALL CSS Variables
+ *
+ * Architecture:
+ *   1. BASE PALETTE (30-40 variables) - Raw color/spacing/typography values
+ *   2. SEMANTIC TOKENS (40-50 variables) - Purpose-based mappings
+ *   3. COMPONENT VARIABLES (30-40 variables) - Component-specific tokens
+ *   4. BOOTSTRAP OVERRIDES - Map Bootstrap vars to our system
+ *   5. DARK MODE - Override changed values only
+ *
+ * Consolidates:
+ *   - theme.css (all variables)
+ *   - main.css (duplicate spacing variables)
+ *   - ucb-overrides.css (Bootstrap vars + UCB colors)
+ *
+ * @version 2.0
+ * @created October 26, 2025
+ * @author Physics Labs Web Team
+ */
+
+/* ============================================================================
+   SECTION 1: BASE PALETTE
+   Raw design tokens - the foundation of the design system
+   Light mode values only - dark mode overrides at bottom
+   ============================================================================ */
+
+:root {
+    /* ===== UCB BRAND COLORS (Official Style Guide) ===== */
+    --ucb-gold: #CFB87C;
+    --ucb-gold-dark: #B59A63;
+    --ucb-gold-text: #8B7332;          /* 4.57:1 on white — WCAG AA for gold text on light bg */
+    --ucb-black: #000000;
+    --ucb-dark-gray: #424242;      /* Official UCB gray */
+    --ucb-light-gray: #EEEEEE;
+    --ucb-white: #FFFFFF;
+
+    /* UCB Extended Palette */
+    --ucb-link-blue: #0277BD;
+    --ucb-link-blue-hover: #01579B;
+    --ucb-green: #2E7D32;
+    --ucb-red: #B71C1C;
+    --ucb-amber: #FFD740;
+    --ucb-brick: #AE5A39;
+
+    /* UCB Secondary Colors (from brand guidelines) */
+    --ucb-light-blue: #E1F5FE;
+    --ucb-light-green: #DCEDC8;
+    --ucb-light-gold: #F1EBD9;
+    --ucb-medium-blue: #4FC3F7;
+    --ucb-light-red: #FFEBEE;
+    --ucb-yellow: #FFF9C4;
+
+    /* ===== GRAYSCALE PALETTE (Light Mode) ===== */
+    --gray-50: #f9f9f9;
+    --gray-100: #f5f5f5;
+    --gray-200: #eeeeee;           /* Same as --ucb-light-gray */
+    --gray-300: #ddd;
+    --gray-400: #bbb;
+    --gray-450: #a0a0a0;           /* Tertiary text, dark theme (4.83:1 on --bg-tertiary) */
+    --gray-500: #999;
+    --gray-600: #666;
+    --gray-700: #565656;
+    --gray-800: #444;
+    --gray-875: #3b3b3b;
+    --gray-900: #333;
+    --gray-925: #2f2f2f;
+    --gray-950: #2a2a2a;
+    --gray-960: #222;
+    --gray-975: #1a1a1a;           /* Very dark gray for navbar/headers */
+
+    /* ===== SEMANTIC COLOR PALETTE ===== */
+    /* Success (Green) */
+    --green-50: #d4edda;
+    --green-100: #a8e6a8;
+    --green-600: #2e7d32;          /* Same as --ucb-green */
+    --green-700: #155724;
+    --green-800: #1b4d2c;
+
+    /* Danger (Red) */
+    --red-50: #f8d7da;
+    --red-100: #ff9999;
+    --red-600: #dc3545;
+    --red-700: #721c24;
+    --red-800: #4d1a1f;
+    --red-900: #c82333;
+
+    /* Warning (Yellow) */
+    --yellow-50: #fff3cd;
+    --yellow-100: #ffe066;
+    --yellow-600: #ffc107;
+    --yellow-700: #7a5a03;  /* Do not lighten: 4.89:1 on --yellow-100, the tightest warning pairing */
+    --yellow-800: #4d3d00;
+    --yellow-900: #c07f00;
+
+    /* Info (Blue) */
+    --blue-50: #d1ecf1;
+    --blue-100: #66c2e0;
+    --blue-600: #17a2b8;
+    --blue-700: #0c5460;
+    --blue-800: #0d3a4d;
+    --blue-900: #117a8b;
+
+    /* Purple scale (for highlights/topic level) */
+    --purple-50: #f3e5f5;
+    --purple-700: #6a1b9a;
+    --purple-800: #4a148c;
+
+    /* ===== SPACING SCALE (8-point grid + fractional values for legacy support) ===== */
+    --spacing-0: 0;
+    --spacing-0_5: 0.125rem;     /* 2px - legacy */
+    --spacing-1: 0.25rem;        /* 4px */
+    --spacing-1_5: 0.375rem;     /* 6px - legacy */
+    --spacing-2: 0.5rem;         /* 8px */
+    --spacing-2_5: 0.625rem;     /* 10px - legacy */
+    --spacing-3: 0.75rem;        /* 12px */
+    --spacing-3_5: 0.875rem;     /* 14px - legacy */
+    --spacing-4: 1rem;           /* 16px */
+    --spacing-5: 1.25rem;        /* 20px */
+    --spacing-6: 1.5rem;         /* 24px */
+    --spacing-7: 1.75rem;        /* 28px */
+    --spacing-8: 2rem;           /* 32px */
+    --spacing-9: 2.25rem;        /* 36px */
+    --spacing-10: 2.5rem;        /* 40px */
+    --spacing-11: 2.75rem;       /* 44px - WCAG 2.1 AA minimum touch target */
+    --spacing-12: 3rem;          /* 48px */
+    --spacing-16: 4rem;          /* 64px */
+    --spacing-20: 5rem;          /* 80px */
+
+    /* ===== TYPOGRAPHY SCALE ===== */
+    /* Font Families */
+    --font-family-base: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-family-headings: 'Roboto Condensed', 'Roboto', sans-serif;
+    --font-family-mono: 'Courier New', Courier, monospace;
+
+    /* Font Sizes */
+    --font-xs: 0.75rem;       /* 12px */
+    --font-sm: 0.875rem;      /* 14px */
+    --font-base: 1rem;        /* 16px */
+    --font-md: 1.1rem;        /* 17.6px */
+    --font-lg: 1.125rem;      /* 18px */
+    --font-xl: 1.25rem;       /* 20px */
+    --font-2xl: 1.5rem;       /* 24px */
+    --font-3xl: 1.75rem;      /* 28px */
+    --font-4xl: 2rem;         /* 32px */
+    --font-5xl: 2.5rem;       /* 40px */
+    --font-6xl: 3rem;         /* 48px */
+
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-base: 1.6;      /* Legacy alias - slightly more relaxed than normal */
+    --line-height-relaxed: 1.75;
+    --line-height-loose: 2;
+
+    /* ===== LEGACY FONT SIZE ALIASES ===== */
+    /* For backward compatibility with existing components.css references */
+    --font-size-xs: var(--font-xs);
+    --font-size-sm: var(--font-sm);
+    --font-size-base: var(--font-base);
+    --font-size-lg: var(--font-lg);
+    --font-size-xl: var(--font-xl);
+    --font-size-2xl: var(--font-2xl);
+    --font-size-3xl: var(--font-3xl);
+    --font-size-4xl: var(--font-4xl);
+    --font-size-5xl: var(--font-5xl);
+    --font-size-6xl: var(--font-6xl);
+
+    /* Legacy font family alias */
+    --font-family-monospace: var(--font-family-mono);
+
+    /* ===== BORDER SYSTEM ===== */
+    /* Border Widths */
+    --border-0: 0;
+    --border-1: 1px;
+    --border-2: 2px;
+    --border-3: 3px;
+    --border-4: 4px;
+
+    /* Legacy border width aliases */
+    --border-width-0: var(--border-0);
+    --border-width-1: var(--border-1);
+    --border-width-2: var(--border-2);
+    --border-width-3: var(--border-3);
+    --border-width-4: var(--border-4);
+
+    /* Border Radius */
+    --radius-none: 0;
+    --radius-sm: 0.25rem;     /* 4px */
+    --radius-md: 0.375rem;    /* 6px */
+    --radius-lg: 0.5rem;      /* 8px */
+    --radius-xl: 0.75rem;     /* 12px */
+    --radius-2xl: 1rem;       /* 16px */
+    --radius-full: 9999px;    /* Fully rounded */
+
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+    /* ===== Z-INDEX SCALE ===== */
+    --z-base: 0;
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-tooltip: 1060;
+    --z-popover: 1070;
+
+    /* ===== TRANSITIONS ===== */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Reduced motion override */
+    --transition-reduced: 0.01ms;
+
+    /* ===== BREAKPOINTS (Reference Only) =====
+     * NOTE: CSS custom properties cannot be used in @media queries.
+     * These values are documented here for reference and consistency.
+     * Always use these exact pixel values in media queries.
+     *
+     * Bootstrap-aligned breakpoints (use these):
+     *   --breakpoint-sm: 576px   - Small devices (landscape phones)
+     *   --breakpoint-md: 768px   - Medium devices (tablets)
+     *   --breakpoint-lg: 992px   - Large devices (desktops)
+     *   --breakpoint-xl: 1200px  - Extra large devices
+     *   --breakpoint-xxl: 1400px - Very large devices
+     *
+     * Additional breakpoints (project-specific):
+     *   --breakpoint-sidebar: 1024px - Sidebar collapse point
+     *
+     * Usage patterns:
+     *   Mobile-first:  @media (min-width: 768px) { ... }
+     *   Desktop-first: @media (max-width: 767px) { ... }
+     *
+     * Note: When using max-width: 768px paired with min-width,
+     * use min-width: 769px to avoid gaps/overlaps.
+     */
+}
+
+/* ============================================================================
+   SECTION 2: SEMANTIC TOKENS
+   Purpose-based mappings - use these in components
+   ============================================================================ */
+
+:root {
+    /* ===== BACKGROUND COLORS ===== */
+    --bg-primary: var(--ucb-white);
+    --bg-secondary: var(--gray-50);
+    --bg-tertiary: var(--gray-100);
+    --bg-elevated: var(--ucb-white);     /* Cards, modals */
+    --bg-inverse: var(--ucb-black);
+    --bg-overlay: rgba(255, 255, 255, 0.95);  /* Image zoom backdrop */
+
+    /* ===== COURSE CHIP COLOR ===== */
+    /* Data-driven categorical color: the HUE is supplied per element from
+       ScheduleService.course_hue (stable per course number); saturation and
+       lightness are these tokens, so help-room course badges / schedule chips
+       adapt to light & dark from one hue. */
+    --course-sat: 58%;
+    --course-tint-l: 91%;     /* badge / chip fill */
+    --course-border-l: 38%;   /* left accent / badge border */
+
+    /* @deprecated Legacy aliases — use canonical names above */
+    --color-bg-primary: var(--bg-primary);
+    --color-bg-secondary: var(--bg-secondary);
+    --color-bg-tertiary: var(--bg-tertiary);
+    --color-bg-elevated: var(--bg-elevated);
+    --color-bg-inverse: var(--bg-inverse);
+
+    /* ===== TEXT COLORS ===== */
+    --text-primary: var(--ucb-black);
+    --text-secondary: var(--gray-700);
+    --text-tertiary: var(--gray-600);
+    /* Collapsed into the tertiary tier. Under AA the two could not stay
+       distinct: --bg-tertiary is the lightest surface, and once both cleared
+       4.5:1 on it they landed within ~0.5:1 of each other — a step no one can
+       see. The name is kept because it still says something at the call site
+       (de-emphasised prose vs. third rung of the ramp), and re-splitting it
+       later needs nothing but headroom. Do not re-split without re-measuring
+       against --bg-tertiary in BOTH themes; that surface sets the floor. */
+    --text-muted: var(--text-tertiary);
+    --text-inverse: var(--ucb-white);
+
+    /* @deprecated Legacy aliases — use canonical names above */
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-tertiary: var(--text-tertiary);
+    --color-text-muted: var(--text-muted);
+    --color-text-inverse: var(--text-inverse);
+
+    /* ===== BORDER COLORS ===== */
+    --border-color: var(--gray-300);
+    --border-color-light: var(--gray-200);
+    --border-color-hover: var(--gray-400);
+
+    /* @deprecated Legacy aliases — use canonical names above */
+    --color-border: var(--border-color);
+    --color-border-light: var(--border-color-light);
+    --color-border-hover: var(--border-color-hover);
+
+    /* ===== HELP ROOM TV DISPLAY ===== */
+    /* The kiosk forces data-theme="dark", so these always render dark (the same
+     * values live in both blocks). They reproduce the approved help-room display
+     * mockups: a near-black stage, a slightly lighter surface for cards/footer,
+     * and a translucent-gold hairline for the warm divider lines. */
+    --hr-display-bg: #141414;
+    --hr-display-surface: #1f1f1f;
+    --hr-display-hairline: rgba(207, 184, 124, 0.35);
+    /* Subtle gold glow behind the masthead and a black scrim under full-bleed
+     * image captions — full gradient values live here (the single source for
+     * raw color), so the display components only reference var(). */
+    --hr-display-glow: radial-gradient(70vw 35vw at 50% -15%, rgba(207, 184, 124, 0.09), transparent 60%);
+    --hr-display-scrim: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.45) 55%, transparent);
+
+    /* @deprecated Additional legacy variables */
+    --color-surface: var(--bg-elevated);
+    --color-link-underline: currentColor;
+
+    /* ===== SEMANTIC STATE COLORS ===== */
+    /* Success */
+    --color-success: var(--green-700);
+    --color-success-bg: var(--green-50);
+    --color-success-border: var(--green-700);
+    --color-success-text: var(--green-700);
+    --color-success-light: var(--green-100);
+    --color-success-dark: var(--green-800);
+
+    /* Danger */
+    --color-danger: var(--red-600);
+    --color-danger-bg: var(--red-50);
+    --color-danger-border: var(--red-600);
+    --color-danger-text: var(--red-700);
+    --color-danger-light: var(--red-100);
+    --color-danger-dark: var(--red-900);
+
+    /* Warning */
+    --color-warning: var(--yellow-600);
+    --color-warning-bg: var(--yellow-50);
+    --color-warning-border: var(--yellow-600);
+    --color-warning-text: var(--yellow-700);
+    --color-warning-light: var(--yellow-100);
+    --color-warning-dark: var(--yellow-900);
+
+    /* Info */
+    --color-info: var(--blue-600);
+    --color-info-bg: var(--blue-50);
+    --color-info-border: var(--blue-600);
+    --color-info-text: var(--blue-700);
+    --color-info-light: var(--blue-100);
+    --color-info-dark: var(--blue-900);
+
+    /* Highlight (Purple - for topic levels, syllabus) */
+    --color-highlight-bg: var(--purple-50);
+    --color-highlight-text: var(--purple-700);
+
+    /* Muted */
+    --color-muted: var(--gray-500);
+    --color-muted-bg: var(--gray-100);
+    --color-muted-border: var(--gray-300);
+    --color-muted-text: var(--gray-600);
+    --color-muted-light: var(--gray-200);
+    --color-muted-dark: var(--gray-700);
+
+    /* ===== INTERACTIVE COLORS ===== */
+    --color-link: var(--ucb-link-blue);
+    --color-link-hover: var(--ucb-link-blue-hover);
+    --color-link-visited: var(--ucb-link-blue);
+    --color-link-active: var(--ucb-link-blue-hover);
+    --color-link-hover-bg: rgba(0, 102, 204, 0.1);
+    --color-link-focus-bg: rgba(0, 102, 204, 0.15);
+    --color-link-active-bg: rgba(0, 102, 204, 0.2);
+
+    --color-focus: var(--ucb-gold);
+    --color-accent: var(--ucb-gold);
+
+    /* ===== QUARTO CONTENT ===== */
+    --section-number-color: var(--text-secondary);
+
+    /* Callout backgrounds (light mode uses the ucb-light-* palette) */
+    --callout-note-bg: var(--ucb-light-blue);
+    --callout-warning-bg: var(--yellow-50);
+    --callout-tip-bg: var(--ucb-light-green);
+    --callout-important-bg: var(--ucb-light-red);
+    --callout-caution-bg: var(--ucb-light-gold);
+    --callout-notebook-bg: var(--ucb-light-gold);
+    --callout-note-header-bg: rgba(2, 119, 189, 0.18);
+    --callout-warning-header-bg: rgba(255, 193, 7, 0.25);
+    --callout-tip-header-bg: rgba(46, 125, 50, 0.18);
+    --callout-important-header-bg: rgba(183, 28, 28, 0.18);
+    --callout-caution-header-bg: rgba(174, 90, 57, 0.18);
+    --callout-notebook-header-bg: rgba(207, 184, 124, 0.25);
+}
+
+/* ============================================================================
+   SECTION 3: COMPONENT VARIABLES
+   Component-specific tokens - use semantic tokens as foundation
+   ============================================================================ */
+
+:root {
+    /* ===== BUTTONS ===== */
+    /* Primary Button (UCB Gold) */
+    --btn-primary-bg: var(--ucb-gold);
+    --btn-primary-text: var(--ucb-black);
+    --btn-primary-border: var(--ucb-gold);
+    --btn-primary-hover-bg: var(--ucb-gold-dark);
+    --btn-primary-hover-text: var(--ucb-black);
+    --btn-primary-hover-border: var(--ucb-gold-dark);
+    --btn-primary-active-bg: #9e8352;
+
+    /* Secondary Button — soft light-gray fill in light mode (the old charcoal
+       read too heavy). Dark mode restores a dark fill in its own block below. */
+    --btn-secondary-bg: var(--gray-200);
+    --btn-secondary-text: var(--ucb-black);
+    --btn-secondary-border: var(--gray-300);
+    --btn-secondary-hover-bg: var(--gray-300);
+    --btn-secondary-hover-text: var(--ucb-black);
+    --btn-secondary-active-bg: var(--gray-400);
+
+    /* Success Button — brand green fill, mirroring --btn-primary-bg's use of
+       --ucb-gold. It previously took --color-success-dark (--green-800,
+       #1b4d2c), which is dark enough to read as near-black rather than green,
+       and that left no room beneath it for a hover: --btn-success-hover-bg
+       resolved to the same --green-800, so the button had no hover state at
+       all. With the brand green on the fill, hover can darken to --green-800
+       the way every other button darkens. --ucb-white holds at 5.13:1 on the
+       fill and 9.79:1 on the hover, with 1.91:1 between the two. */
+    --btn-success-bg: var(--ucb-green);
+    --btn-success-text: var(--ucb-white);
+    --btn-success-border: var(--ucb-green);
+    --btn-success-hover-bg: var(--green-800);
+    --btn-success-hover-text: var(--ucb-white);
+
+    /* Danger Button */
+    --btn-danger-bg: var(--color-danger);
+    --btn-danger-text: var(--ucb-black);
+    --btn-danger-border: var(--color-danger);
+    --btn-danger-hover-bg: var(--color-danger-dark);
+    --btn-danger-hover-text: var(--ucb-black);
+    --btn-danger-active-bg: var(--color-danger-dark);
+
+    /* Info Button — dark teal fill so white text clears 4.5:1. The old
+       --color-info fill (#17a2b8) gave only 3.04:1. Mirrors Success, which
+       already uses its -dark variant for the same reason. */
+    --btn-info-bg: var(--color-info-dark);
+    --btn-info-text: var(--ucb-white);
+    --btn-info-border: var(--color-info-dark);
+    --btn-info-hover-bg: var(--blue-700);
+    --btn-info-hover-text: var(--ucb-white);
+    --btn-info-active-bg: var(--blue-800);
+
+    /* Warning Button — black on amber reads 12.88:1, and --color-warning is the
+       same value in both themes, so no dark-mode override is needed. */
+    --btn-warning-bg: var(--color-warning);
+    --btn-warning-text: var(--ucb-black);
+    --btn-warning-border: var(--color-warning);
+    --btn-warning-hover-bg: var(--color-warning-dark);
+    --btn-warning-active-bg: var(--color-warning-dark);
+
+    /* ===== BADGES ===== */
+    /* Demo/Equipment Badges */
+    --badge-demo-bg: #e3f2fd;
+    --badge-demo-text: #1565c0;                   /* 7.02:1 contrast */
+    --badge-demo-border: #1565c0;
+
+    --badge-custom-bg: #fff3cd;
+    --badge-custom-text: #856404;
+    --badge-custom-border: #856404;
+
+    --badge-equipment-loan-bg: #e8f5e9;
+    --badge-equipment-loan-text: #2e7d32;         /* 6.26:1 contrast */
+    --badge-equipment-loan-border: #2e7d32;
+
+    --badge-equipment-bg: #e8f5e9;               /* Light green background */
+    --badge-equipment-text: #1b5e20;              /* Dark green text - 8.5:1 contrast */
+    --badge-equipment-border: #1b5e20;
+
+    /* Status Badges */
+    --badge-ready-bg: #d4edda;
+    --badge-ready-text: #155724;
+    --badge-ready-border: #155724;
+
+    --badge-checked-out-bg: #d1ecf1;
+    --badge-checked-out-text: #0c5460;
+    --badge-checked-out-border: #0c5460;
+
+    --badge-late-bg: #f8d7da;
+    --badge-late-text: #721c24;
+    --badge-late-border: #721c24;
+
+    --badge-returned-bg: #d4edda;
+    --badge-returned-text: #155724;
+    --badge-returned-border: #155724;
+
+    /* Difficulty Badges */
+    --badge-introductory-bg: #d4edda;
+    --badge-introductory-text: #155724;
+    --badge-introductory-border: #155724;
+
+    --badge-intermediate-bg: #fff3cd;
+    --badge-intermediate-text: #856404;
+    --badge-intermediate-border: #856404;
+
+    --badge-advanced-bg: #f8d7da;
+    --badge-advanced-text: #721c24;
+    --badge-advanced-border: #721c24;
+
+    --badge-course-bg: #cfe2ff;
+    --badge-course-text: #084298;
+    --badge-course-border: #084298;
+
+    --badge-single-bg: #d4edda;
+    --badge-single-text: #155724;
+    --badge-single-border: #155724;
+
+    --badge-extended-bg: #fff3cd;
+    --badge-extended-text: #856404;
+    --badge-extended-border: #856404;
+
+    /* ===== CARDS ===== */
+    --card-bg: var(--bg-elevated);
+    --card-border: var(--border-color);
+    --card-padding: var(--spacing-5);
+    --card-radius: var(--radius-lg);
+    --card-border-radius: var(--card-radius);  /* Legacy alias */
+    --card-shadow: var(--shadow-sm);
+    --card-shadow-hover: var(--shadow-md);
+
+    /* ===== TOGGLE SWITCH ===== */
+    --toggle-knob: var(--bg-primary);
+    --toggle-track-on: #4caf50;
+
+    /* ===== FORMS ===== */
+    --form-bg: var(--bg-primary);
+    --form-text: var(--text-primary);
+    --form-border: var(--border-color);
+    --form-border-focus: var(--color-focus);
+    --form-border-error: var(--color-danger);
+    --form-padding: var(--spacing-3);
+    --form-radius: var(--radius-md);
+    --form-label-text: var(--text-primary);
+    --form-label-weight: var(--font-weight-semibold);
+    --form-placeholder-text: var(--gray-500);
+    --form-disabled-bg: var(--gray-100);
+    --form-disabled-text: var(--gray-600);
+    --form-required-color: var(--color-danger);
+
+    /* Legacy form variables */
+    --form-input-text: var(--form-text);
+    --form-border-width: var(--border-2);
+    --form-input-padding: var(--form-padding);
+
+    /* ===== TABLES ===== */
+    --table-bg: var(--bg-primary);
+    --table-border: var(--gray-600);
+    --table-border-width: var(--border-1);
+    --table-header-bg: var(--bg-secondary);
+    --table-header-text: var(--text-primary);
+    --table-cell-padding: var(--spacing-3);
+    --table-cell-border: var(--gray-400);
+    --table-row-bg: var(--bg-primary);        /* Legacy alias */
+    --table-row-alt-bg: var(--gray-50);
+    --table-row-hover-bg: var(--gray-100);
+    --table-row-selected-bg: var(--gray-200);
+    --table-row-even-bg: var(--gray-50);
+    --table-row-odd-bg: var(--ucb-white);
+    --table-row-number-bg: var(--gray-100);
+    --table-focus-bg: var(--gray-100);
+
+    /* ===== CODE BLOCKS ===== */
+    --code-bg: var(--gray-50);
+    --code-border: var(--gray-300);
+    --code-header-bg: var(--gray-200);
+    --code-content-bg: var(--gray-50);
+    --inline-code-color: #c7254e;
+    --inline-code-bg: var(--gray-100);
+
+    /* Syntax highlighting tokens (Pygments default / Pandoc light) */
+    --syntax-keyword: #007020;
+    --syntax-type: #902000;
+    --syntax-comment: #60a0b0;
+    --syntax-string: #4070a0;
+    --syntax-string-escape: #4070a0;
+    --syntax-string-regex: #235388;
+    --syntax-number: #40a070;
+    --syntax-function: #06287e;
+    --syntax-operator: #666666;
+    --syntax-variable: #bb60d5;
+    --syntax-namespace: #0e84b5;
+    --syntax-tag: #062873;
+    --syntax-preprocessor: #bc7a00;
+    --syntax-error: #ff0000;
+    --syntax-highlight-bg: #ffffcc;
+
+    /* ===== NAVIGATION ===== */
+    --nav-bg: var(--gray-975);
+    --nav-text: var(--ucb-light-gray);
+    --nav-text-hover: var(--ucb-white);
+    --nav-active-bg: var(--ucb-gold);
+    --nav-active-text: var(--ucb-black);
+    /* Level 1 of the demo and equipment navigation ladders — the area/topic
+       buttons plus Collapse All, the mobile toggle and the level-1 chevrons.
+       Themed, because one fill cannot play both roles: #424242 is a subtle
+       lift above the #222 dark page but a maximum-contrast slab against white,
+       and nine of them stacked made the light-mode sidebar read as a block of
+       dark bars. Depth also comes from the 1rem-per-level indentation.
+
+       Light mode runs the gold family down the ladder: solid gold parent, pale
+       gold child. That puts the page's existing gold — the Demo Bot button, the
+       carousel arrows — in the sidebar too, which is what you see first, since
+       every level 1 is collapsed on load. It also puts the heavier fill on the
+       parent, where it belongs; the reverse read as a child outranking its own
+       parent. --ucb-gold clears the --bg-secondary panel at 1.85:1, so level 1
+       needs no border to read as a button.
+
+       Dark mode keeps its original treatment: dark-gray parent, gold child. */
+    --nav-level-1-bg: var(--ucb-gold);
+    --nav-level-1-text: var(--ucb-black);
+    --nav-level-1-hover-bg: var(--ucb-gold-dark);
+
+    --nav-level-2-bg: var(--ucb-light-gold);
+    --nav-level-2-text: var(--ucb-black);
+    --nav-level-2-hover-bg: var(--ucb-gold);
+    --nav-border: rgba(255, 255, 255, 0.1);
+    --nav-dropdown-bg: var(--gray-975);
+    --nav-dropdown-hover-bg: rgba(128, 128, 128, 0.333);
+
+    /* ===== DOCUMENTATION SIDEBAR ===== */
+    --docs-sidebar-width: 250px;
+    --docs-sidebar-bg: var(--bg-secondary);
+    --docs-sidebar-border: var(--border-color);
+    --docs-sidebar-section-title-text: var(--text-primary);
+    --docs-sidebar-page-count-text: var(--text-muted);
+    --docs-sidebar-link-text: var(--text-secondary);
+    --docs-sidebar-link-hover-bg: var(--bg-elevated);
+    --docs-sidebar-link-active-text: var(--text-primary);
+    --docs-sidebar-link-active-border: var(--ucb-gold);
+    --docs-sidebar-subsection-title-text: var(--text-primary);
+    --docs-sidebar-subsection-title-border: var(--ucb-gold);
+    --docs-sidebar-expand-icon-color: var(--ucb-gold);
+
+    /* ===== HEADING & SECTION ACCENTS ===== */
+    /* Neutral in light mode, gold in dark mode */
+    --heading-rule-color: var(--border-color);
+
+    /* ===== SCROLLBARS ===== */
+    --scrollbar-track-bg: var(--gray-100);
+    --scrollbar-thumb-bg: var(--gray-600);
+    --scrollbar-thumb-hover-bg: var(--gray-700);
+
+    /* ===== HEADER & FOOTER ===== */
+    --header-bg: var(--ucb-black);
+    --header-text: var(--ucb-white);
+    --header-link: var(--ucb-white);
+    --header-link-hover: var(--ucb-gold);
+    --header-affiliation-text: var(--gray-500);
+
+    --footer-bg: var(--ucb-black);
+    --footer-text: var(--ucb-white);
+    --footer-link: var(--ucb-gold);
+    --footer-link-hover: var(--ucb-white);
+    --footer-border: rgba(255, 255, 255, 0.1);
+
+    /* ===== MODALS ===== */
+    --modal-bg: var(--bg-elevated);
+    --modal-border: var(--border-color);
+    --modal-shadow: var(--shadow-2xl);
+    --modal-backdrop-bg: rgba(0, 0, 0, 0.5);
+    --modal-header-bg: var(--ucb-gold);
+    --modal-header-text: var(--ucb-black);
+    --modal-padding: var(--spacing-6);
+    --modal-radius: var(--radius-lg);
+    --modal-border-radius: var(--modal-radius);  /* Legacy alias */
+
+    /* ===== ALERTS ===== */
+    --alert-success-bg: var(--color-success-bg);
+    --alert-success-text: var(--color-success-text);
+    --alert-success-border: var(--color-success-text);
+
+    --alert-danger-bg: var(--color-danger-bg);
+    --alert-danger-text: var(--color-danger-text);
+    --alert-danger-border: var(--color-danger-text);
+
+    --alert-warning-bg: var(--color-warning-bg);
+    --alert-warning-text: var(--color-warning-text);
+    --alert-warning-border: var(--color-warning-text);
+
+    --alert-info-bg: var(--color-info-bg);
+    --alert-info-text: var(--color-info-text);
+    --alert-info-border: var(--color-info-text);
+
+    /* ===== SAFETY WARNINGS ===== */
+    --safety-danger-bg: rgba(220, 38, 38, 0.06);
+    --safety-danger-header-bg: rgba(220, 38, 38, 0.18);
+    --safety-danger-border: #dc2626;
+    --safety-danger-text: var(--text-secondary);
+    --safety-danger-title: #991b1b;
+
+    --safety-warning-bg: rgba(234, 88, 12, 0.06);
+    --safety-warning-header-bg: rgba(234, 88, 12, 0.18);
+    --safety-warning-border: #ea580c;
+    --safety-warning-text: var(--text-secondary);
+    --safety-warning-title: #9a3412;
+
+    --safety-caution-bg: rgba(202, 138, 4, 0.06);
+    --safety-caution-header-bg: rgba(202, 138, 4, 0.20);
+    --safety-caution-border: #ca8a04;
+    --safety-caution-text: var(--text-secondary);
+    --safety-caution-title: #854d0e;
+
+    --safety-info-bg: rgba(37, 99, 235, 0.06);
+    --safety-info-header-bg: rgba(37, 99, 235, 0.18);
+    --safety-info-border: #2563eb;
+    --safety-info-text: var(--text-secondary);
+    --safety-info-title: #1e40af;
+
+    /* ===== CONFLICT/STATUS INDICATORS ===== */
+    --conflict-warning-bg: var(--yellow-50);
+    --conflict-warning-border: var(--yellow-600);
+    --conflict-warning-text: var(--yellow-700);
+
+    --conflict-error-bg: var(--red-50);
+    --conflict-error-border: var(--red-600);
+    --conflict-error-text: var(--red-700);
+
+    --alternate-suggestion-bg: var(--blue-50);
+    --alternate-suggestion-border: var(--blue-700);
+    --alternate-suggestion-text: var(--blue-700);
+
+    /* ===== INFO/WARNING BOXES ===== */
+    --info-box-bg: #e7f3ff;
+    --info-box-border: #1976d2;
+    --info-box-text: #0c5460;
+
+    --warning-box-bg: #fff9c4;
+    --warning-box-border: #ffc107;
+    --warning-box-text: #856404;
+
+    /* ===== HELPER TEXT ===== */
+    --helper-text-color: var(--text-tertiary);        /* Maps to #666 */
+    --helper-text-dark: var(--text-secondary);        /* Maps to #565656 */
+    --helper-text-light: var(--text-muted);           /* Maps to #999 */
+
+    /* ===== STATS/SUMMARY CARDS ===== */
+    --stats-card-bg: #f8f9fa;
+    --stats-card-border: #dee2e6;
+    --stats-card-text: #333333;
+    --stats-card-label: var(--text-tertiary);
+
+    /* ===== COURSE LEVEL COLORS ===== */
+    --course-undergraduate-bg: #e8f5e9;
+    --course-undergraduate-text: #2e7d32;
+    --course-graduate-bg: #fce4ec;
+    --course-graduate-text: #c2185b;
+
+    /* ===== STATUS INDICATORS ===== */
+    --status-available-color: var(--green-600);       /* Green */
+    --status-unavailable-color: #d32f2f;              /* Red */
+    --status-pending-color: #f57c00;                  /* Orange */
+    --status-checked-out-color: var(--blue-600);      /* Blue */
+
+    /* ===== INLINE COLOR OVERRIDES ===== */
+    /* For replacing hardcoded inline styles */
+    --inline-white: #ffffff;
+    --inline-black: #000000;
+    --inline-gray-light: #f5f5f5;
+    --inline-gray-medium: #666666;
+    --inline-gray-dark: #333333;
+
+    /* ===== FOCUS STYLES ===== */
+    --focus-outline-width: var(--border-3);
+    --focus-outline-offset: var(--border-2);
+    --focus-outline-style: solid;         /* Legacy variable for focus outline style */
+    --focus-outline-color: var(--ucb-gold);
+    --focus-shadow: 0 0 0 0.25rem rgba(207, 184, 124, 0.25);
+    --shadow-focus: var(--focus-shadow);  /* Legacy alias */
+}
+
+/* ============================================================================
+   SECTION 4: BOOTSTRAP OVERRIDES
+   Map Bootstrap variables to our consolidated system
+   ============================================================================ */
+
+:root {
+    /* Typography */
+    --bs-body-font-family: var(--font-family-base);
+    --bs-headings-font-family: var(--font-family-headings);
+    --bs-headings-font-weight: var(--font-weight-bold);
+
+    /* Links */
+    --bs-link-color: var(--color-link);
+    --bs-link-hover-color: var(--color-link-hover);
+    --bs-link-visited-color: var(--color-link-visited);
+
+    /* Navbar */
+    --bs-navbar-active-color: var(--nav-active-text);
+
+    /* AI Cart Builder Chat Colors (Light Mode) */
+    --chat-user-bg: var(--ucb-link-blue);
+    --chat-user-text: var(--ucb-white);
+    --chat-assistant-bg: var(--gray-200);
+    --chat-assistant-text: var(--text-primary);
+    --chat-border: var(--border-color);
+    --chat-input-bg: var(--bg-elevated);
+    --chat-input-border: var(--border-color);
+    --chat-input-focus-border: var(--ucb-link-blue);
+    --chat-typing-dot: var(--text-tertiary);
+
+    /* Calendar Grid (Date Picker) */
+    --calendar-today-ring: var(--ucb-gold);
+    --calendar-selected-bg: var(--btn-primary-bg);
+    --calendar-selected-text: var(--btn-primary-text);
+    --calendar-class-dot: var(--ucb-gold);
+    --calendar-hover-bg: var(--bg-secondary);
+    --chat-item-bg: var(--bg-elevated);
+    --chat-item-border: var(--border-color);
+    --chat-item-selected-bg: var(--ucb-light-blue);
+    --chat-item-selected-border: var(--ucb-link-blue);
+    --chat-item-selected-glow: rgba(2, 119, 189, 0.2);
+
+    /* Badge colors for confidence levels (Light Mode) */
+    --badge-confidence-high: var(--green-100);    /* 80-100% match - light green bg */
+    --badge-confidence-high-text: var(--ucb-black);  /* Black text for contrast */
+    --badge-confidence-medium: var(--yellow-100);  /* 60-79% match - light yellow bg */
+    --badge-confidence-medium-text: var(--ucb-black);  /* Black text */
+    --badge-confidence-low: var(--red-100);     /* <60% match - light red bg */
+    --badge-confidence-low-text: var(--ucb-black);  /* Black text */
+
+    /* Generic badge (used for item counts, etc.) */
+    --badge-default-bg: #e3f2fd;                  /* Light blue background */
+    --badge-default-text: var(--ucb-black);       /* Black text for contrast */
+
+    /* Condition badges */
+    --badge-excellent-bg: var(--green-100);       /* Light green */
+    --badge-excellent-text: var(--ucb-black);     /* Black text */
+    --badge-good-bg: var(--blue-50);              /* Light blue */
+    --badge-good-text: var(--ucb-black);          /* Black text */
+    --badge-fair-bg: var(--yellow-50);            /* Light yellow */
+    --badge-fair-text: var(--ucb-black);          /* Black text */
+    --badge-poor-bg: var(--red-50);               /* Light red */
+    --badge-poor-text: var(--ucb-black);          /* Black text */
+
+    /* Success badge (match indicators) */
+    --badge-success-bg: var(--green-100);         /* Light green */
+    --badge-success-text: var(--ucb-black);       /* Black text */
+    --badge-success-border: var(--green-700);     /* Dark green */
+
+    /* Warning badge (custom requests, pending calibration) */
+    --badge-warning-bg: var(--yellow-50);         /* Light yellow */
+    --badge-warning-text: var(--ucb-black);       /* Black text */
+    --badge-warning-border: var(--yellow-700);    /* Dark yellow */
+
+    /* Danger badge (failed calibration) */
+    --badge-danger-bg: var(--red-50);             /* Light red */
+    --badge-danger-text: var(--ucb-black);        /* Black text */
+    --badge-danger-border: var(--red-700);        /* Dark red */
+
+    /* Info badge (Beta, etc.) */
+    --badge-info-bg: #e3f2fd;                     /* Light blue */
+    --badge-info-text: var(--ucb-black);          /* Black text */
+}
+
+/* ============================================================================
+   SECTION 5: DARK MODE
+   Override only values that change in dark mode
+   ============================================================================ */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* ===== BRAND OVERRIDES ===== */
+    --ucb-gold-text: var(--ucb-gold);  /* 8.95:1 on dark bg — no darkening needed */
+
+    /* ===== BACKGROUNDS ===== */
+    --bg-primary: #222222;
+    --bg-secondary: var(--gray-950);
+    --bg-tertiary: var(--gray-900);
+    --bg-elevated: var(--gray-950);
+    --bg-inverse: var(--ucb-white);
+    --bg-overlay: rgba(0, 0, 0, 0.90);
+
+    /* Course chip color — same hue, retuned S/L for the dark surface. */
+    --course-sat: 48%;
+    --course-tint-l: 26%;
+    --course-border-l: 62%;
+
+    /* ===== TEXT ===== */
+    --text-primary: var(--gray-200);
+    --text-secondary: var(--gray-400);
+    /* Was --gray-500 (#999), 4.43:1 on --bg-tertiary. Lifted to clear AA on
+       that surface, which is the lightest in the dark ramp and so sets the
+       floor for the whole text scale. See the --text-muted note in :root. */
+    --text-tertiary: var(--gray-450);
+    --text-muted: var(--text-tertiary);
+    --text-inverse: var(--ucb-black);
+
+    /* ===== BORDERS ===== */
+    --border-color: var(--gray-800);
+    --border-color-light: var(--gray-900);
+    --border-color-hover: var(--gray-700);
+
+    /* ===== HELP ROOM TV DISPLAY (dark; mirrors the :root values) ===== */
+    --hr-display-bg: #141414;
+    --hr-display-surface: #1f1f1f;
+    --hr-display-hairline: rgba(207, 184, 124, 0.35);
+    --hr-display-glow: radial-gradient(70vw 35vw at 50% -15%, rgba(207, 184, 124, 0.09), transparent 60%);
+    --hr-display-scrim: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.45) 55%, transparent);
+
+    /* ===== INTERACTIVE COLORS (Dark Mode) ===== */
+    --color-link: var(--ucb-gold);
+    --color-link-visited: var(--ucb-gold);
+    --color-link-hover-bg: rgba(207, 184, 124, 0.15);
+    --color-link-focus-bg: rgba(207, 184, 124, 0.2);
+    --color-link-hover: var(--ucb-gold-dark);
+    --color-link-active: var(--ucb-gold-dark);
+    --color-link-active-bg: rgba(207, 184, 124, 0.25);
+
+    /* ===== QUARTO CONTENT (Dark Mode) ===== */
+    --section-number-color: var(--ucb-gold);
+    --callout-note-bg: rgba(2, 119, 189, 0.15);
+    --callout-warning-bg: rgba(255, 193, 7, 0.15);
+    --callout-tip-bg: rgba(46, 125, 50, 0.15);
+    --callout-important-bg: rgba(183, 28, 28, 0.15);
+    --callout-caution-bg: rgba(174, 90, 57, 0.15);
+    --callout-notebook-bg: rgba(207, 184, 124, 0.15);
+    --callout-note-header-bg: rgba(2, 119, 189, 0.3);
+    --callout-warning-header-bg: rgba(255, 193, 7, 0.3);
+    --callout-tip-header-bg: rgba(46, 125, 50, 0.3);
+    --callout-important-header-bg: rgba(183, 28, 28, 0.3);
+    --callout-caution-header-bg: rgba(174, 90, 57, 0.3);
+    --callout-notebook-header-bg: rgba(207, 184, 124, 0.35);
+
+    /* ===== SEMANTIC STATES (Dark Mode Adjustments) ===== */
+    --color-success-bg: var(--green-800);
+    --color-success-text: var(--green-100);
+
+    --color-danger-bg: var(--red-800);
+    --color-danger-text: var(--red-100);
+
+    --color-warning-bg: var(--yellow-800);
+    --color-warning-text: var(--yellow-100);
+
+    --color-info-bg: var(--blue-800);
+    --color-info-text: var(--blue-100);
+
+    --color-highlight-bg: var(--purple-800);
+    --color-highlight-text: #ce93d8;            /* Light purple for dark mode */
+
+    /* Light mode's --gray-200 (#eeeeee) is a near-white raised surface; unset
+       here it leaked into dark mode as a white fill, and four separate rules
+       had grown to patch that per selector. Both themes now darken on hover:
+       #f9f9f9 -> #eeeeee in light, --bg-tertiary (#333) -> #2a2a2a in dark. */
+    --color-muted-light: var(--gray-950);
+
+    /* ===== BUTTONS (Dark Mode) ===== */
+    --btn-success-text: var(--ucb-white);
+
+    /* ===== BADGES (Dark Mode) ===== */
+    --badge-demo-bg: #1a3d5c;
+    --badge-demo-text: #66b3ff;
+    --badge-demo-border: #66b3ff;
+
+    --badge-custom-bg: #4d3d00;
+    --badge-custom-text: #ffe066;
+    --badge-custom-border: #ffe066;
+
+    --badge-equipment-loan-bg: #1b4d2c;
+    --badge-equipment-loan-text: #a8e6a8;
+    --badge-equipment-loan-border: #a8e6a8;
+
+    --badge-equipment-bg: #1b4d2c;               /* Dark green background */
+    --badge-equipment-text: #a8e6a8;              /* Light green text */
+    --badge-equipment-border: #a8e6a8;
+
+    --badge-ready-bg: #1b4d2c;
+    --badge-ready-text: #a8e6a8;
+    --badge-ready-border: #a8e6a8;
+
+    --badge-checked-out-bg: #0d3a4d;
+    --badge-checked-out-text: #66c2e0;
+    --badge-checked-out-border: #66c2e0;
+
+    --badge-late-bg: #4d1a1f;
+    --badge-late-text: #ff9999;
+    --badge-late-border: #ff9999;
+
+    --badge-returned-bg: #1b4d2c;
+    --badge-returned-text: #a8e6a8;
+    --badge-returned-border: #a8e6a8;
+
+    --badge-introductory-bg: #1b4d2c;
+    --badge-introductory-text: #a8e6a8;
+    --badge-introductory-border: #a8e6a8;
+
+    --badge-intermediate-bg: #4d3d00;
+    --badge-intermediate-text: #ffe066;
+    --badge-intermediate-border: #ffe066;
+
+    --badge-advanced-bg: #4d1a1f;
+    --badge-advanced-text: #ff9999;
+    --badge-advanced-border: #ff9999;
+
+    --badge-course-bg: #1a3d5c;
+    --badge-course-text: #66b3ff;
+    --badge-course-border: #66b3ff;
+
+    --badge-single-bg: #1b4d2c;
+    --badge-single-text: #a8e6a8;
+    --badge-single-border: #a8e6a8;
+
+    --badge-extended-bg: #4d3d00;
+    --badge-extended-text: #ffe066;
+    --badge-extended-border: #ffe066;
+
+    /* ===== COMPONENTS (Dark Mode) ===== */
+    --card-bg: var(--gray-950);
+    --card-border: var(--gray-800);
+    --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+
+    /* Secondary Button — keep the dark charcoal fill in dark mode (the light
+       block now uses a soft light-gray fill, which would be wrong on dark). */
+    --btn-secondary-bg: var(--gray-700);
+    --btn-secondary-text: var(--ucb-white);
+    --btn-secondary-border: var(--gray-700);
+    --btn-secondary-hover-bg: var(--gray-600);
+    --btn-secondary-hover-text: var(--ucb-white);
+    --btn-secondary-active-bg: var(--gray-800);
+
+    --toggle-knob: var(--bg-primary);
+    --toggle-track-on: var(--color-success-light);
+
+    --form-bg: var(--gray-950);
+    --form-text: var(--text-primary);
+    --form-border: var(--gray-700);
+    --form-disabled-bg: var(--gray-900);
+    --form-disabled-text: var(--gray-600);
+    --form-placeholder-text: var(--gray-600);
+    --form-border-error: #ff6666;
+    --form-required-color: #ff6b6b;
+
+    --table-bg: var(--gray-950);
+    --table-border: var(--gray-700);
+    --table-header-bg: var(--gray-900);
+    --table-header-text: var(--ucb-white);
+    --table-cell-border: var(--gray-700);
+    --table-row-bg: var(--bg-primary);
+    --table-row-alt-bg: var(--gray-950);
+    --table-row-hover-bg: var(--gray-875);
+    --table-row-selected-bg: var(--gray-800);
+    --table-row-even-bg: var(--gray-950);
+    --table-row-odd-bg: var(--bg-primary);
+    --table-row-number-bg: var(--gray-925);
+    --table-focus-bg: var(--gray-875);
+
+    --code-bg: var(--gray-950);
+    --code-border: var(--gray-700);
+    --code-header-bg: var(--gray-900);
+    --code-content-bg: var(--gray-950);
+    --inline-code-color: #f0a0a0;
+    --inline-code-bg: var(--bg-tertiary);
+
+    /* Syntax highlighting tokens (VS Code Dark) */
+    --syntax-keyword: #569cd6;
+    --syntax-type: #4ec9b0;
+    --syntax-comment: #6a9955;
+    --syntax-string: #ce9178;
+    --syntax-string-escape: #d7ba7d;
+    --syntax-string-regex: #d16969;
+    --syntax-number: #b5cea8;
+    --syntax-function: #dcdcaa;
+    --syntax-operator: #d4d4d4;
+    --syntax-variable: #9cdcfe;
+    --syntax-namespace: #4ec9b0;
+    --syntax-tag: #569cd6;
+    --syntax-preprocessor: #c586c0;
+    --syntax-error: #f44747;
+    --syntax-highlight-bg: #3a3a3a;
+
+    --modal-bg: var(--gray-950);
+    --modal-border: var(--gray-800);
+    --modal-backdrop-bg: rgba(0, 0, 0, 0.7);
+
+    --nav-bg: #1a1a1a;
+    --nav-dropdown-bg: #1a1a1a;
+
+    /* Nav ladder levels 1 and 2 — the original treatment, kept as-is. On the
+       dark page these fills read as raised surfaces rather than slabs. See
+       :root for why light mode diverges. */
+    --nav-level-1-bg: var(--ucb-dark-gray);
+    --nav-level-1-text: var(--ucb-white);
+    --nav-level-1-hover-bg: var(--gray-900);
+
+    --nav-level-2-bg: var(--ucb-gold);
+    --nav-level-2-text: var(--ucb-black);
+    --nav-level-2-hover-bg: var(--ucb-gold-dark);
+
+    --heading-rule-color: var(--ucb-gold);
+
+    /* ===== DOCUMENTATION SIDEBAR (Dark Mode) ===== */
+    --docs-sidebar-bg: var(--bg-secondary);
+    --docs-sidebar-border: var(--border-color);
+    --docs-sidebar-link-hover-bg: var(--gray-900);
+
+    /* ===== SCROLLBARS (Dark Mode) ===== */
+    --scrollbar-track-bg: var(--gray-975);
+    --scrollbar-thumb-bg: var(--gray-600);
+    --scrollbar-thumb-hover-bg: var(--gray-500);
+
+    /* ===== SHADOWS (Darker) ===== */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.7);
+    --focus-shadow: 0 0 0 0.25rem rgba(207, 184, 124, 0.4);
+    --focus-outline-color: var(--ucb-gold);
+
+    /* ===== COMPONENT-SPECIFIC (Dark Mode) ===== */
+    --conflict-warning-bg: var(--yellow-800);
+    --conflict-warning-border: var(--yellow-600);
+    --conflict-warning-text: var(--yellow-100);
+
+    --conflict-error-bg: var(--red-800);
+    --conflict-error-border: var(--red-600);
+    --conflict-error-text: var(--red-100);
+
+    --alternate-suggestion-bg: var(--blue-800);
+    --alternate-suggestion-border: var(--blue-600);
+    --alternate-suggestion-text: var(--blue-100);
+
+    --info-box-bg: #1a3d5c;
+    --info-box-border: #66b3ff;
+    --info-box-text: #66c2e0;
+
+    --warning-box-bg: #4d3d00;
+    --warning-box-border: #ffc107;
+    --warning-box-text: #ffe066;
+
+    /* ===== SAFETY WARNINGS (Dark Mode) ===== */
+    --safety-danger-bg: rgba(220, 38, 38, 0.10);
+    --safety-danger-header-bg: rgba(220, 38, 38, 0.25);
+    --safety-danger-border: #ff6b6b;
+    --safety-danger-text: var(--text-secondary);
+    --safety-danger-title: #ffb3b3;
+
+    --safety-warning-bg: rgba(234, 88, 12, 0.10);
+    --safety-warning-header-bg: rgba(234, 88, 12, 0.25);
+    --safety-warning-border: #ff9933;
+    --safety-warning-text: var(--text-secondary);
+    --safety-warning-title: #ffcc99;
+
+    --safety-caution-bg: rgba(202, 138, 4, 0.10);
+    --safety-caution-header-bg: rgba(202, 138, 4, 0.28);
+    --safety-caution-border: #ffd966;
+    --safety-caution-text: var(--text-secondary);
+    --safety-caution-title: #ffeb99;
+
+    --safety-info-bg: rgba(37, 99, 235, 0.10);
+    --safety-info-header-bg: rgba(37, 99, 235, 0.25);
+    --safety-info-border: #66b3ff;
+    --safety-info-text: var(--text-secondary);
+    --safety-info-title: #99d6ff;
+
+    --helper-text-color: #aaaaaa;
+    --helper-text-dark: #cccccc;
+    --helper-text-light: #888888;
+
+    --stats-card-bg: var(--bg-elevated);
+    --stats-card-border: var(--border-color);
+    --stats-card-text: var(--text-primary);
+    --stats-card-label: var(--text-secondary);
+
+    --course-undergraduate-bg: #1b4d2c;
+    --course-undergraduate-text: #a8e6a8;
+    --course-graduate-bg: #4d1a3d;
+    --course-graduate-text: #ff99cc;
+
+    --status-available-color: #a8e6a8;
+    --status-unavailable-color: #ff9999;
+    --status-pending-color: #ffb74d;
+    --status-checked-out-color: #66c2e0;
+
+    --inline-white: var(--gray-950);      /* Inverted for dark mode */
+    --inline-black: var(--gray-200);      /* Inverted for dark mode */
+    --inline-gray-light: var(--gray-900); /* Inverted for dark mode */
+    --inline-gray-medium: #aaaaaa;        /* Inverted for dark mode */
+    --inline-gray-dark: #cccccc;          /* Inverted for dark mode */
+
+    /* AI Cart Builder Chat Colors (Dark Mode) */
+    --chat-user-bg: var(--ucb-gold);
+    --chat-user-text: var(--ucb-black);
+    --chat-assistant-bg: var(--gray-900);
+    --chat-assistant-text: var(--gray-100);
+    --chat-item-selected-bg: var(--gray-800);
+    --chat-item-selected-border: var(--ucb-gold);
+    --chat-item-selected-glow: rgba(207, 184, 124, 0.2);
+
+    /* Calendar Grid (Dark Mode) */
+    --calendar-hover-bg: var(--gray-800);
+
+    /* Badge colors for confidence levels (Dark Mode) */
+    --badge-confidence-high: var(--green-800);    /* 80-100% match - dark green bg */
+    --badge-confidence-high-text: var(--green-100);  /* Light green text for contrast */
+    --badge-confidence-medium: var(--yellow-800);  /* 60-79% match - dark yellow bg */
+    --badge-confidence-medium-text: var(--yellow-100);  /* Light yellow text */
+    --badge-confidence-low: var(--red-800);     /* <60% match - dark red bg */
+    --badge-confidence-low-text: var(--red-100);  /* Light red text */
+
+    /* Generic badge (used for item counts, etc.) - Dark Mode */
+    --badge-default-bg: #1a3d5c;                  /* Dark blue background */
+    --badge-default-text: #66b3ff;                /* Light blue text */
+
+    /* Condition badges - Dark Mode */
+    --badge-excellent-bg: var(--green-800);       /* Dark green */
+    --badge-excellent-text: var(--green-100);     /* Light green text */
+    --badge-good-bg: var(--blue-800);             /* Dark blue */
+    --badge-good-text: var(--blue-100);           /* Light blue text */
+    --badge-fair-bg: var(--yellow-800);           /* Dark yellow */
+    --badge-fair-text: var(--yellow-100);         /* Light yellow text */
+    --badge-poor-bg: var(--red-800);              /* Dark red */
+    --badge-poor-text: var(--red-100);            /* Light red text */
+
+    /* Success badge (match indicators) - Dark Mode */
+    --badge-success-bg: var(--green-800);         /* Dark green */
+    --badge-success-text: var(--green-100);       /* Light green text */
+    --badge-success-border: var(--green-100);     /* Light green */
+
+    /* Warning badge - Dark Mode */
+    --badge-warning-bg: var(--yellow-800);        /* Dark yellow */
+    --badge-warning-text: var(--yellow-100);      /* Light yellow text */
+    --badge-warning-border: var(--yellow-100);    /* Light yellow */
+
+    /* Danger badge - Dark Mode */
+    --badge-danger-bg: var(--red-800);            /* Dark red */
+    --badge-danger-text: var(--red-100);          /* Light red text */
+    --badge-danger-border: var(--red-100);        /* Light red */
+
+    /* Info badge (Beta, etc.) - Dark Mode */
+    --badge-info-bg: #1a3d5c;                     /* Dark blue */
+    --badge-info-text: #66b3ff;                   /* Light blue text */
+}
+
+/* ============================================================================
+   SECTION 6: REDUCED MOTION
+   Respect user preferences for reduced motion
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --transition-fast: var(--transition-reduced);
+        --transition-base: var(--transition-reduced);
+        --transition-slow: var(--transition-reduced);
+    }
+}

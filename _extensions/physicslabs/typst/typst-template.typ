@@ -201,7 +201,7 @@
   // Code — inline
   show raw.where(block: false): it => {
     box(fill: cu-light-gold, inset: (x: 4pt, y: 1pt), radius: 2pt)[
-      #set text(font: ("Consolas", "DejaVu Sans Mono", "monospace"), size: 9.5pt)
+      #set text(font: ("Consolas", "DejaVu Sans Mono"), size: 9.5pt)
       #it
     ]
   }
@@ -212,7 +212,7 @@
   // fill, creating a visible color mismatch inside the styled container.
   show raw.where(block: true): it => {
     block(fill: cu-light-gold, inset: (x: 12pt, y: 8pt), radius: 4pt, width: 100%)[
-      #set text(font: ("Consolas", "DejaVu Sans Mono", "monospace"), size: 9pt)
+      #set text(font: ("Consolas", "DejaVu Sans Mono"), size: 9pt)
       #{it.lines.map(l => l.body).join(linebreak())}
     ]
   }

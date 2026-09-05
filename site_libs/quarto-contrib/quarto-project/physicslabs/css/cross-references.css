@@ -1,0 +1,48 @@
+/**
+ * Cross-Reference Links Styling
+ * For \ref{...} syntax that creates internal document links
+ */
+
+.cross-reference {
+    /* Visual distinction */
+    color: var(--color-link);
+    text-decoration: none;
+    font-weight: 600;
+
+    /* Ensure no extra spacing */
+    margin: 0;
+    padding: 0;
+
+    /* Subtle underline on hover */
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-fast);
+}
+
+.cross-reference:hover,
+.cross-reference:focus {
+    border-bottom-color: var(--color-link);
+    outline: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .cross-reference {
+        text-decoration: underline;
+    }
+}
+
+/* Focus visible for keyboard navigation */
+.cross-reference:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Print styles - show reference ID in parentheses */
+@media print {
+    .cross-reference::after {
+        content: " (ref: " attr(href) ")";
+        font-size: 0.85em;
+        color: var(--text-secondary);
+    }
+}

@@ -127,7 +127,7 @@ _extensions/physicslabs/
                           copy buttons, back-to-top
   nav-to-sidebar.py       pre-render: _nav.yml -> _physicslabs-sidebar.yml
   typst/                  typst-template.typ, typst-show.typ (accessible-PDF format)
-  fonts/                  Roboto and Roboto Condensed for the Typst build
+  fonts/                  Roboto for the Typst build (Condensed is HTML-only, via Google Fonts)
   assets/img/             logo sources
 tools/                    maintainer scripts (not installed into course sites)
 _quarto.yml, _nav.yml, index.qmd, guide/   fixture site rendered by CI
