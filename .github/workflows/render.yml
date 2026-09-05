@@ -23,8 +23,11 @@ jobs:
         with:
           version: "1.9.38"
 
-      - name: Render
+      - name: Render HTML
         run: quarto render --to html
+
+      - name: Render Typst
+        run: quarto render --to typst
 
       - name: Check the output
         run: |
@@ -35,4 +38,7 @@ jobs:
           grep -q 'id="quarto-sidebar"' _site/index.html
           grep -q 'quarto-bridge.css' _site/guide/elements.html
           ! grep -rq 'code-copy-button' _site/guide/elements.html
-          echo "fixture rendered with chrome, sidebar and bridge stylesheet"
+          test -f _site/guide/elements.pdf
+          grep -q 'course: "Fixture Course"' guide/elements.typ
+          ! grep -qE '^\s*set math\.equation\(numbering' guide/elements.typ
+          echo "fixture rendered with chrome, sidebar, bridge stylesheet, and stamped PDFs"

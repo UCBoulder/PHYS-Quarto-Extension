@@ -186,4 +186,33 @@ squash keeps the commit messages, so write them with what and why.
 3. Sync Now in the course portal, then open a page live. It should look exactly
    as it did before.
 
+## 12. Moving to v0.2.0: the Typst format and no preview-only menu
+
+Sites adopted on v0.1.0 need one more PR. From `site/`:
+
+1. `quarto update UCBoulder/PHYS-Quarto-Extension` (or `quarto add ...@v0.2.0`)
+   and commit the changed files under `_extensions/UCBoulder/physicslabs/`.
+2. In `_quarto.yml`, delete the whole `format.typst` block. The extension now
+   supplies it: template partials, fonts, page size and margins, numbered
+   sections, `syntax-highlighting: idiomatic`, `keep-typ`. Keep
+   `_quarto-typst.yml` if the repository has one; it only lists what to render.
+   If the site set `physicslabs.nav`, delete it; the key no longer exists, and
+   the platform never showed that menu.
+3. Delete `site/_extensions/cu-boulder/` (the old template partials) and
+   `site/assets/fonts/`. The extension ships both.
+4. In `build.py`, point the fonts directory used for the standalone Typst
+   compile (`FONTS_DIR`, passed as `--font-path`) at
+   `_extensions/UCBoulder/physicslabs/fonts`. Nothing else in `build.py`
+   changes: the render still uses `keep-typ`, and the post-processing and
+   PDF/UA-1 compile are as before.
+5. If the old template's header stamp said something other than the site's
+   `physicslabs.title` (Python Resources was stamped "PHYS 2150"), the new
+   stamp is the fix, not a regression.
+6. Verify as in step 9, and additionally open one PDF: the header carries the
+   course name from `physicslabs.title`, a tall figure is capped rather than
+   pushed to its own page, and an unlabeled display equation carries no number.
+7. The deploy workflow's font copy (`assets/fonts` to the deploy branch, where
+   present) can go; the platform serves the CI-built PDFs and never compiles
+   Typst.
+
 Update this document when a step turns out to be wrong.

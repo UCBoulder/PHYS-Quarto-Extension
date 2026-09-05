@@ -4,12 +4,13 @@
 project:
   type: physicslabs
   output-dir: _site
+  # The fixture pages only; docs/ holds the runbook, not site content.
+  render:
+    - index.qmd
+    - guide/*.qmd
 
 website:
   title: "Fixture Course"
 
 physicslabs:
   title: "Fixture Course"
-  nav:
-    - label: "Python Resources"
-      href: "https://physicslabs.colorado.edu/courses/python/"

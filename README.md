@@ -39,12 +39,12 @@ website:
   title: "Quantum Forge"
 
 physicslabs:
-  title: "Quantum Forge"                    # header title
+  title: "Quantum Forge"                    # HTML header title and PDF page stamp
   subtitle: "Physics Undergraduate Labs"    # optional; this is the default
-  nav:                                      # optional Resources menu in the nav bar
-    - label: "Python Resources"
-      href: "https://physicslabs.colorado.edu/courses/python/"
 ```
+
+Site navigation comes from `_nav.yml`, the same file the platform reads; there
+is no preview-only menu.
 
 Add `/_physicslabs-sidebar.yml` to the site's `.gitignore`; see below.
 
@@ -86,7 +86,18 @@ recipe: see [docs/adopting-a-course-site.md](docs/adopting-a-course-site.md).
 - **Chrome-only SCSS** in `scss/`. Content styling is deliberately absent so it
   cannot drift from the platform.
 
-The filter only acts on HTML output. Typst and PDF rendering are untouched.
+- **The accessible-PDF Typst format.** `format.typst` defaults (Roboto from the
+  extension's `fonts/`, US letter, margins, numbered sections, idiomatic
+  syntax highlighting, `keep-typ`) and the CU template partials in `typst/`.
+  The page header stamp is `physicslabs.title`, so one setting names the
+  course in the HTML header and on every PDF page. The template is the union
+  of the fixes the course repositories had accumulated separately: figures are
+  capped at a maximum height, code blocks keep their gold fill, and only
+  labeled equations are numbered, as in the HTML. Course build scripts keep
+  the `.typ`, post-process it, and compile with standalone Typst for
+  PDF/UA-1; that part stays in each repository.
+
+The chrome filter only acts on HTML output.
 
 ## Maintenance
 
@@ -115,6 +126,8 @@ _extensions/physicslabs/
   html/after-body.html    chrome placement, toggle sync, sidebar toggle, mobile TOC,
                           copy buttons, back-to-top
   nav-to-sidebar.py       pre-render: _nav.yml -> _physicslabs-sidebar.yml
+  typst/                  typst-template.typ, typst-show.typ (accessible-PDF format)
+  fonts/                  Roboto and Roboto Condensed for the Typst build
   assets/img/             logo sources
 tools/                    maintainer scripts (not installed into course sites)
 _quarto.yml, _nav.yml, index.qmd, guide/   fixture site rendered by CI

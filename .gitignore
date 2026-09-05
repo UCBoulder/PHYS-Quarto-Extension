@@ -5,3 +5,6 @@
 __pycache__/
 
 **/*.quarto_ipynb
+# keep-typ output of the fixture render
+/*.typ
+/guide/*.typ

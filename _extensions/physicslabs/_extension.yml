@@ -1,6 +1,6 @@
 title: Physics Labs
 author: CU Boulder Physics Undergraduate Laboratories
-version: 0.1.0
+version: 0.2.0
 quarto-required: ">=1.9.0"
 contributes:
   project:
@@ -42,3 +42,26 @@ contributes:
         link-external-newwindow: true
         # The after-body script adds the platform's copy button instead.
         code-copy: false
+      typst:
+        # Shared accessible-PDF setup. Course build scripts keep the .typ and
+        # compile it with standalone Typst (PDF/UA-1) after post-processing.
+        template-partials:
+          - typst/typst-template.typ
+          - typst/typst-show.typ
+        font-paths:
+          - fonts
+        mainfont: "Roboto"
+        fontsize: 10.5pt
+        papersize: us-letter
+        margin:
+          x: 0.75in
+          y: 0.5in
+        number-sections: true
+        toc: false
+        callout-appearance: simple
+        callout-icon: false
+        # Quarto 1.9+ uses Pandoc Skylighting for code blocks, which emits inline
+        # elements that lose line breaks inside list items. "idiomatic" delegates
+        # highlighting to Typst's native engine, preserving block-level raw output.
+        syntax-highlighting: idiomatic
+        keep-typ: true
