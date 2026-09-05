@@ -57,6 +57,8 @@ Remove:
 - the whole `format.html` block: `theme`, `include-before-body`,
   `include-after-body`, `number-sections`, `link-external-newwindow`, and
   any `css` entries that pointed at the old theme
+- `highlight-style`, if present (PHYS-4430 had `github`/`dracula`): the
+  platform's stylesheet sets its own token colors and overrides it
 
 Keep:
 
