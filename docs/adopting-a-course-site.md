@@ -211,8 +211,18 @@ Sites adopted on v0.1.0 need one more PR. From `site/`:
 6. Verify as in step 9, and additionally open one PDF: the header carries the
    course name from `physicslabs.title`, a tall figure is capped rather than
    pushed to its own page, and an unlabeled display equation carries no number.
+   Without a PDF viewer: `quarto render <page>.qmd --to typst` (add
+   `--profile typst` where `_quarto-typst.yml` exists) leaves the kept `.typ`
+   next to the source, not in `_site/`. It must contain `course: "<title>"`
+   and no line starting with `set math.equation(numbering`; delete it
+   afterwards. A built PDF must contain the string `Roboto` (grep its bytes).
 7. The deploy workflow's font copy (`assets/fonts` to the deploy branch, where
    present) can go; the platform serves the CI-built PDFs and never compiles
    Typst.
+8. Update the docs that named the removed paths. Grep `site/`, `CLAUDE.md` and
+   `README.md` for `assets/fonts` and `_extensions/cu-boulder`: the
+   build-and-deploy page's "what stays in this repo" bullet, the structure and
+   PDF-styling notes in `site/CLAUDE.md`, and the directory tree in
+   `site/README.md`. Copy PHYS-4700's "PDFs use the extension too" bullet.
 
 Update this document when a step turns out to be wrong.
