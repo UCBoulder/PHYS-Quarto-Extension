@@ -8,3 +8,4 @@ __pycache__/
 # keep-typ output of the fixture render
 /*.typ
 /guide/*.typ
+/site_libs/
