@@ -251,4 +251,131 @@ re-wrap wider and gain pages after the first CI build on it; that is the
 correction, not a regression. It also fixes the sidebar script rejecting a
 page that has a same-named directory beside it.
 
+## 13. Moving to v0.3.0: build.py onto the build core
+
+v0.3.0 ships the build pipeline as a Python package inside the extension
+(`_extensions/UCBoulder/physicslabs/physicslabs_build/`), so `site/build.py`
+shrinks to a wrapper that names what is specific to the course. The design,
+the API and the per-course notes are in
+[build-core.md](build-core.md); this section is the recipe. One PR per
+repository, in this order: PHYS-Python-Resources (no hooks), then PHYS-3330
+and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
+
+1. `quarto update UCBoulder/PHYS-Quarto-Extension` (or `quarto add ...@v0.3.0`)
+   from `site/`, and commit the changed files under
+   `_extensions/UCBoulder/physicslabs/`, including the new
+   `physicslabs_build/` directory.
+
+2. Before touching `build.py`, record the deploy branch's PDF list; it is the
+   post-merge check:
+
+   ```sh
+   git fetch origin deploy/django
+   git ls-tree -r --name-only origin/deploy/django | grep '\.pdf$' | sort > /tmp/pdfs-before.txt
+   ```
+
+3. Replace `build.py` with the wrapper. This is the whole file for a site with
+   no hooks (PHYS-Python-Resources); the reference copy is `build.py` at the
+   root of the extension repository:
+
+   ```python
+   """Build the <course> site: HTML plus accessible PDF/UA-1 PDFs.
+
+   The pipeline lives in the physicslabs extension; this file only names what is
+   specific to this course. See docs/build-and-deploy.qmd.
+   """
+
+   import sys
+   from pathlib import Path
+
+   ROOT = Path(__file__).resolve().parent
+   sys.dont_write_bytecode = True   # keep __pycache__ out of _extensions/
+   sys.path.insert(0, str(ROOT / "_extensions" / "UCBoulder" / "physicslabs"))
+   from physicslabs_build import Site, run  # noqa: E402
+
+   site = Site(
+       root=ROOT,
+       description="Build <course> site (HTML + accessible PDF).",
+       require_api=1,
+   )
+   raise SystemExit(run(site))
+   ```
+
+   `require_api=1` is what makes a later `quarto update` across a breaking
+   core change fail with one line instead of a traceback; always pass it.
+
+4. Add the course's own hooks to the `Site`. What each repository keeps
+   (build-core.md, section 4):
+
+   - **PHYS-3330**: `pdf_name=` a function that renames
+     `lab-guides/labN/index.qmd` to `phys3330-labN.pdf` and leaves every other
+     page at its stem (the example wrapper in build-core.md, section 2). Add
+     `_quarto-typst.yml` with `project: render: ["**/*.qmd"]` so the Typst
+     pass skips the notebooks. Everything else in the old script is core now.
+   - **PHYS-4430**: `pdf_name=naming.prefixed("phys4430")`; import `naming`
+     with `Site` and `run`. The core gains it notebook validation, the width
+     cap and the table normalization.
+   - **PHYS-1140**: `course_data=generate_course_data`, an explicit
+     `source_passes` list (`resolve_weekly` before `sources.stamp_dates`, then
+     `stamp_visibility`, `stamp_course_data`), and a `pdf_name` hook whose
+     pattern is `lab-(\d+)`, not `lab(\d+)`: the old one never matched
+     `lab-01`, so every lab PDF was `index.pdf`. Its pages keep
+     `pdf-download: true`; the platform finds the renamed PDF as the single
+     one in the directory. `convert_boxed_math` and `check_weekly_lectures`:
+     the first is core, the second stays.
+   - **PHYS-4700**: `course_data=generate_course_data` and
+     `source_passes=[stamp_course_data, *sources.DEFAULT_PASSES]`, with
+     `stamp_course_data` rewritten on `sources.substitute_shortcodes` and its
+     season fallback as the resolver. Its own `resolve_variables` goes; the
+     core's runs because `_variables.yml` exists.
+   - **PHYS-2150**: `course_data=generate_course_data` and the explicit list
+     `[sources.validate_notebooks, resolve_weekly, resolve_syllabus,
+     sources.stamp_dates, stamp_rubrics, stamp_course_data,
+     stamp_visibility]`. `resolve_weekly` and `resolve_syllabus` call
+     `ws.add_date_dep(page, *partials)` instead of returning tuples, and a
+     small pass before `stamp_dates` registers the rubric YAMLs the same way,
+     so the instructor guide's date still follows its sources. The
+     lab-guide warning goes; the gate covers it.
+
+   Every course pass takes `(ws, verbose)`, reads through `ws.read`, writes
+   through `ws.write`, and raises `physicslabs_build.BuildError` to stop the
+   build. Course data must read YAML through `sources.load_yaml`, which fails
+   the build when PyYAML is missing rather than skipping.
+
+5. In both workflows (`quarto.yml`, `pr-check.yml`), add the step PHYS-3330
+   and 4430 already have, before the build:
+
+   ```yaml
+   - name: Install Python dependencies
+     run: python -m pip install --upgrade pip pyyaml
+   ```
+
+   The core fails the build when a pass needs PyYAML and it is missing; the
+   old scripts warned and shipped literal shortcodes.
+
+6. Rewrite the docs that described the old script: the "What build.py does"
+   section of the build-and-deploy page (the steps are unchanged, the code
+   lives in the extension, and `Requirements` gains PyYAML), the `build.py`
+   bullet in `CLAUDE.md`, and the tree in `site/README.md`. PHYS-4700's
+   troubleshooting row that blames a stale `.quarto` cache for the
+   fontawesome abort describes PHYS-2150's old bug; delete it.
+
+7. Verify locally: `python build.py -v` must end in `Done.`, list every page
+   under `Step 3/3` as `OK`, and leave `git status` clean; then the checks in
+   step 9 above. Image filenames must not contain spaces: Quarto's own Typst
+   compile cannot open the percent-encoded path, aborts the project render
+   there, and the build then fails with "typst render incomplete" naming
+   every page after it. Rename the file.
+
+8. After the merge, once Build & Deploy has run:
+
+   ```sh
+   git fetch origin deploy/django
+   git ls-tree -r --name-only origin/deploy/django | grep '\.pdf$' | sort | diff /tmp/pdfs-before.txt -
+   ```
+
+   No output means the same PDFs at the same paths. PHYS-1140 is the
+   exception: its lab PDFs change from `index.pdf` to `phys1140-labNN.pdf`,
+   which is the fix. Then step 11 above.
+
 Update this document when a step turns out to be wrong.

@@ -3,9 +3,11 @@
 /_physicslabs-sidebar.yml
 /.luarc.json
 __pycache__/
+.pytest_cache/
 
 **/*.quarto_ipynb
 # keep-typ output of the fixture render
 /*.typ
 /guide/*.typ
+/guide/*_files/
 /site_libs/

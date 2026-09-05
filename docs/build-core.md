@@ -1,9 +1,12 @@
 # The shared build core
 
 Design for moving the six course sites' `site/build.py` pipelines into one
-Python package that ships inside this extension. Phase 1: study, decide,
-document. Nothing here is implemented yet, and no course repository changes
-until the core exists and the fixture CI exercises it.
+Python package that ships inside this extension. Phase 1 (study, decide,
+document) is sections 1 to 5; the review decisions are section 6, and
+section 7 records where the implementation, shipped as
+`_extensions/physicslabs/physicslabs_build/` in v0.3.0, departs from the
+text below. No course repository changes until its own migration PR
+(adoption runbook, section 13).
 
 Studied: `site/build.py`, `_quarto.yml`, `_quarto-typst.yml`, both workflows
 and the build docs in PHYS-4700, PHYS-2150, PHYS-1140, PHYS-3330, PHYS-4430 and
@@ -99,7 +102,7 @@ Functions that are not in all six but earn a place in the core:
 | `resolve_variables` | 4700, 3330, 4430 | any (identical apart from comments and the helper's name) | Three copies of the same pass. Runs whenever `_variables.yml` exists. | generic |
 | `decode_image_paths` | 3330, 4430, Py | any (identical apart from the docstring) | Standalone Typst opens the literal `%20` name and fails. Always on; `unquote` is a no-op on paths without `%`. | generic |
 | `cap_image_widths` | 3330 | as is | The template caps figure *height*; an explicit `width="20cm"` in the `.qmd` still overflows the 7 in (17.78 cm) text block. PHYS-3330 has five figures at 20 cm and one at 18 cm, which this filter caps today; PHYS-4430's `gaussian-beams/week-3` figure is 20 cm and ships overflowing. Always on. | generic |
-| `normalize_table_columns` | 3330 | as is | Pandoc emits `#table(columns: 3,` (the fixture does); the platform's `tables.css` sets tables to `width: 100%`, so full-width `1fr` columns in the PDF match the HTML. Anchored to `#table(`. Always on, checked visually on the fixture before the first release (open question 3). | generic |
+| `normalize_table_columns` | 3330 | as is | Pandoc emits `#table(columns: 3,` (the fixture does); the platform's `tables.css` sets tables to `width: 100%`, so full-width `1fr` columns in the PDF match the HTML. Anchored to `#table(`. Always on (section 6, decision 3). | generic |
 | `convert_boxed_math` | 1140 | as is | Pandoc's `\boxed{}` output puts `#box()` inside math, which Typst rejects. Four PHYS-1140 pages use `\boxed`; no-op elsewhere. Always on. | generic |
 | `stamp_course_data` | 4700 (with a season fallback); 2150, 1140 (plain) | the walk becomes a core primitive; the resolver stays in the wrapper | The "walk every `.qmd`, substitute, snapshot, write bytes" loop is the same code that `resolve_variables`, `stamp_rubrics`, `resolve_syllabus` and both `resolve_weekly` variants also carry. The core provides it once; the `{{< meta >}}` resolver is course data. | primitive generic, resolver course-specific |
 
@@ -306,8 +309,8 @@ explicit PyYAML install where one is missing (section 4).
    orphans. The render-incomplete gate (every `.qmd` must have a `.typ`) uses
    the same exclusions for the expected set. No repository has a `.qmd` under
    an underscore or dot directory that Quarto would skip, so the gate's
-   "every `.qmd`" rule is accurate today; open question 6 covers the day it
-   is not.
+   "every `.qmd`" rule is accurate today; section 6, item 6, defers the day
+   it is not.
 
 4. **The PHYS-1140 rename.** `re.match(r"lab(\d+)", ...)` at line 864 never
    matches `lab-01` through `lab-12`, so every PHYS-1140 PDF is `index.pdf`.
@@ -322,7 +325,8 @@ explicit PyYAML install where one is missing (section 4).
    wrapper. PHYS-1140's wrapper fixes the pattern to `lab-(\d+)` and names
    `phys1140-lab01.pdf`, which the platform resolves through the same
    single-PDF fallback PHYS-3330 relies on. The alternative, dropping the
-   rename, is a one-line difference; the owner's call (open question 2).
+   rename, was a one-line difference; the fix was chosen (section 6,
+   decision 2).
 
    The rename is also why the scripts delete stale `index.pdf` files: when the
    target is renamed, Quarto's own `index.pdf` would sit beside it and the
@@ -471,56 +475,102 @@ image and equation. Typst is the validator.
 4. `python build.py -v --ci --pdf`, then `grep -q '^date: "' index.qmd`:
    `--ci` keeps the stamp.
 
-The fixture content has to grow for step 3 to mean anything: `elements.typ`
-today holds one labeled equation, one inline equation, one integer-column
-table, one fontawesome import, and no `image()` call and no unlabeled
-display math. `guide/elements.qmd` gains an image with `fig-alt` (a small
-PNG committed under `guide/`), a second image whose filename contains a
-space and carries `width="20cm"`, an unlabeled display equation, a
-multi-line aligned one, a code block containing a `$`, and a `\boxed{}`
-equation. All of these are content elements the platform styles, so they
-belong in the fixture anyway.
+The fixture content had to grow for step 3 to mean anything: before v0.3.0
+`elements.typ` held one labeled equation, one inline equation, one
+integer-column table, one fontawesome import, and no `image()` call and no
+unlabeled display math. `guide/elements.qmd` now carries an image with
+`fig-alt` (a small PNG committed under `guide/`), a second image at
+`width="20cm"`, an unlabeled display equation, a multi-line aligned one, a
+code block containing a `$`, and a `\boxed{}` equation. All of these are
+content elements the platform styles, so they belong in the fixture anyway.
+The plan also called for an image whose filename contains a space; it cannot
+be in the fixture, for the reason in section 7, and the percent-decoding is
+covered by a unit test on the real kept line instead.
 
 The Quarto pin stays 1.9.38 to match the course workflows; the fixture runs
 Python 3.12.
 
-## 6. Open questions for review
+## 6. Decisions
 
-1. **Package name.** `physicslabs_build` as argued above, or `build/` as in
-   the brief with an `importlib` shim in every wrapper to avoid the name
-   clash. The shim is five lines of the copy-pasted kind this design removes.
-2. **PHYS-1140 naming.** Fix the pattern so students download
-   `phys1140-lab01.pdf` (recommended, consistent with PHYS-3330 and with the
-   1140 build doc's own wording about "CI-renamed PDFs"), or drop the rename
-   and keep `index.pdf`. Related: whether PHYS-3330 wants `naming.prefixed`
-   for all index pages or, as its doc says, lab guides only.
-3. **`normalize_table_columns` on by default.** It changes every
-   integer-column table in five sites' PDFs to full width. Check the fixture
-   and one PHYS-2150 lab guide side by side before the release; if a course
-   wants auto-width tables the wrapper can remove the filter.
-4. **PyYAML hard failure** versus the current warn-and-skip, and whether the
-   core should also fail when a `.ipynb` exists and `validate_notebooks`
-   cannot parse it (proposed: yes to both).
-5. **Auto-enabled passes.** `validate_notebooks` and `resolve_variables` run
-   by file presence under the default pass list. A wrapper that lists passes
-   explicitly opts out by omission; is an explicit `disable=` clearer?
-6. **The render-incomplete gate and `project.render`.** The gate expects a
-   `.typ` for every `.qmd`. A repository that excludes a `.qmd` through
-   `project.render` would fail it. None does today; the fix when one does is
-   an `exclude` glob on `Site`, or reading the render list from
-   `quarto inspect`.
-7. **Notebook date quoting.** Unifying to the quoted form changes what the
-   deploy branch carries for notebooks; confirm the platform's frontmatter
-   reader accepts both before switching.
-8. **Version coupling.** `API_VERSION` plus the extension's semver: a
-   breaking core change is a minor bump and a runbook section, as v0.2.0
-   was. Is that enough, or should the wrapper also pin the extension
-   version it was written against?
-9. **A PDF/UA validator in CI.** Typst's own check covers alt text and
-   heading structure; veraPDF would cover the rest of the standard. Worth a
-   separate look; not needed for the migration.
-10. **The future of `--ci`.** If page dates and Canvas links ever come from
-    the platform instead of stamped sources, the source passes disappear and
-    the PDF step could become a Quarto post-render script contributed by the
-    extension, shrinking each `build.py` to nothing. Out of scope; noted so
-    the package boundaries (sources versus typ/pdf) are drawn with it in mind.
+The questions this design left open, as decided at review (September 2026)
+and implemented in v0.3.0.
+
+1. **Package name.** `physicslabs_build`. The wrapper importing it is itself
+   `build.py`, and PyPA's `build` is on many machines.
+2. **Naming.** PHYS-1140 fixes its pattern to `lab-(\d+)` so students
+   download `phys1140-lab01.pdf`; the platform resolves it as the single PDF
+   in the directory, as PHYS-3330's are. PHYS-3330 renames lab guides only,
+   as its doc says, and keeps every other page at its stem.
+3. **`normalize_table_columns`** is on by default. A course that wants
+   auto-width tables removes the filter through `typ_filters`.
+4. **Hard failures.** Missing PyYAML with a `_variables.yml` present fails
+   the build (`sources.load_yaml`), and so does an unparseable `.ipynb`
+   (`validate_notebooks`). Both raise `BuildError`; `run` prints it and
+   restores the sources.
+5. **No `disable=` option.** An explicit `source_passes` list replaces the
+   default entirely; a wrapper opts out of a core pass by not listing it.
+6. **The render-incomplete gate and `project.render`.** Deferred. The gate
+   expects a `.typ` for every `.qmd` outside `_site/`, `_extensions/` and
+   `.quarto/`; no repository excludes a `.qmd` through `project.render`.
+7. **Dates are always written quoted**, in `.qmd` frontmatter and in a
+   notebook's first raw cell alike: `date: "March 3, 2026"`.
+8. **Version coupling is `require_api` only.** The wrapper passes the
+   `API_VERSION` it was written for and `run` refuses a mismatch with one
+   line. The default value is the installed core's own version, so a wrapper
+   must pass it explicitly for the check to mean anything; the reference
+   wrapper does.
+9. **A PDF/UA validator in CI.** Deferred. Typst's own check is the gate.
+10. **The future of `--ci`.** Deferred; the package boundary between
+    `sources` and `typ`/`pdf` is drawn so the PDF step could become a
+    post-render script later.
+
+## 7. Implementation notes
+
+Where v0.3.0 departs from sections 1 to 5, or found something they did not
+know. Each was verified on the fixture with Quarto 1.9.37 and Typst 0.14.2.
+
+- **Quarto 1.9 writes image alt text itself.** A kept `.typ` from Quarto
+  1.9.37 carries `image("beam-profile.png", alt: "...")` straight from
+  `fig-alt`. `add_image_alt_text` keeps its "skip if `alt:` is present" rule,
+  so on current Quarto it is the fallback for output an older Quarto wrote,
+  and the fixture reports `0/2 image(s) updated`.
+- **A percent-encoded image path aborts the Typst render.** With an image
+  named `wide plot.png`, Quarto's own Typst compile fails on
+  `wide%20plot.png` ("file not found"), Quarto stops the project render on
+  that page, every page after it has no `.typ`, and the gate fails the build.
+  `decode_image_paths` repairs the kept file for the standalone compile but
+  cannot reach a page Quarto never wrote. Course sites must not use spaces in
+  image filenames; the filter stays for the pages that render last and for
+  other characters Quarto encodes. The fixture's second image is
+  `wide-plot.png`, and the decoding is unit-tested on the real kept line.
+- **Numbered equations are wrapped twice.** `_process_quarto_block_math`
+  leaves the equation content between plain `$`, so `_process_inline_math`
+  wraps it again: `#math.equation(block: true, numbering: ..., alt: "...",
+  [ #box[#math.equation(alt: "...", $ ... $)] ])`. That is what all six
+  course scripts produced and what every deployed PDF contains; the port is
+  faithful and the test asserts it. Using the null-byte placeholder there
+  too, as the standalone pass does, is a one-line change that alters how
+  every numbered equation renders (inline style inside a block), so it waits
+  for its own PR with a visual check.
+- **`\boxed{}` compiles on Typst 0.14.2.** The `#box(...)` inside math that
+  PHYS-1140's `convert_boxed_math` rewrites no longer fails a standalone
+  compile. The conversion is kept: it is what PHYS-1140's PDFs ship with,
+  and its output is a centered box rather than a box inside an equation.
+- **The gate runs before the empty-census warning.** The old scripts returned
+  success with "No .typ files found" when Quarto produced nothing at all;
+  the core fails that case, since it is the most complete render failure.
+- **`typ.Chain`.** `typ.chain(before, after)` returns a `Chain`, a list
+  subclass the core takes as the complete order; a plain `typ_filters` list
+  is appended after `CORE_CHAIN`. That is how one field carries both
+  meanings section 2 gave it.
+- **`substitute_shortcodes` returns `(files changed, unresolved keys)`** and
+  leaves the reporting to the calling pass, so `resolve_variables` prints
+  the same "no value in _variables.yml for:" line the course scripts did.
+- **`BuildError`** is the one exception type passes raise; `run` prints it,
+  restores the sources unless `--ci`, and exits 1. Tool discovery failures
+  return 1 before any source is touched, as section 2 orders.
+- **The `--course-data` placeholder** is one line for every course:
+  `# Generated by build.py --course-data; do not edit or commit`.
+- **The template checks stay in CI.** The core deletes each kept `.typ` after
+  its compile, so `render.yml` renders one page a second time to grep the
+  course stamp and the equation-numbering rule off a kept file.
