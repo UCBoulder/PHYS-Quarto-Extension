@@ -102,8 +102,13 @@ site/_physicslabs-sidebar.yml
 ```
 
 The first is written by the extension's pre-render step on every render (only
-when its content changes). The second is added by Quarto when it sees a Lua
-filter.
+when its content changes). The second is written by the Quarto VS Code
+extension, not the CLI: once a Lua file in the workspace is opened and the Lua
+language server is set up, it drops `.luarc.json` at the root of the first
+workspace folder, holding the absolute path of the local Quarto install. That
+is why the entry is anchored at the repository root rather than under
+`site/`, and why `quarto render` alone never creates it; do not read its
+absence during step 9 as a problem.
 
 ## 6. Keep the extension off the deploy branch
 
