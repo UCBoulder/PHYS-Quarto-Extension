@@ -23,6 +23,12 @@ quarto update UCBoulder/PHYS-Quarto-Extension
 
 Pin a release with `@`, for example `quarto add UCBoulder/PHYS-Quarto-Extension@v0.1.0`.
 
+**Installing into a site that already declares `project: type: physicslabs`**
+(for example a fresh adoption where `_quarto.yml` was edited first, or a
+checkout whose `_extensions/` was deleted) fails with "Unsupported project
+type physicslabs": Quarto reads `_quarto.yml` before it installs anything.
+Move `_quarto.yml` aside for the `quarto add`, then restore it.
+
 Then in `_quarto.yml`:
 
 ```yaml
