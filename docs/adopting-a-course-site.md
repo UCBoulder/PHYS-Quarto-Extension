@@ -303,6 +303,9 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
 
    `require_api=1` is what makes a later `quarto update` across a breaking
    core change fail with one line instead of a traceback; always pass it.
+   Point the docstring's last sentence at wherever the repository keeps its
+   build notes: PHYS-Python-Resources has no build-and-deploy page, so its
+   wrapper cites the Build section of `CLAUDE.md`.
 
 4. Add the course's own hooks to the `Site`. What each repository keeps
    (build-core.md, section 4):
@@ -359,6 +362,13 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
    bullet in `CLAUDE.md`, and the tree in `site/README.md`. PHYS-4700's
    troubleshooting row that blames a stale `.quarto` cache for the
    fontawesome abort describes PHYS-2150's old bug; delete it.
+   PHYS-Python-Resources has neither a build-and-deploy page nor a
+   `site/README.md`: its build notes are the Build section of `CLAUDE.md`
+   and, in `site/docs/scope-and-conventions.qmd`, the "PDFs use the
+   extension too" bullet plus the shortcode-resolution callout that sent
+   courses to PHYS-4430's `resolve_variables()` as the reference
+   implementation (the core's `sources.resolve_variables` now). Grep the
+   repository for `build.py` rather than trusting the page names above.
 
 7. Verify locally: `python build.py -v` must end in `Done.`, list every page
    under `Step 3/3` as `OK`, and leave `git status` clean; then the checks in
