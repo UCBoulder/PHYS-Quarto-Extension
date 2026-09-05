@@ -156,7 +156,7 @@ from physicslabs_build import Site, naming, run  # noqa: E402
 
 
 def lab_guide_name(rel: Path) -> str:
-    """lab-guides/labN/index.qmd -> phys3330-labN.pdf; everything else keeps its stem."""
+    """labN/index.qmd -> phys3330-labN.pdf (lab guides and teaching notes); everything else keeps its stem."""
     m = re.fullmatch(r"lab(\d+)", rel.parent.name)
     if m and rel.name == "index.qmd":
         return f"phys3330-lab{m.group(1)}.pdf"
@@ -167,6 +167,7 @@ site = Site(
     root=ROOT,
     description="Build PHYS 3330 site (HTML + accessible PDF).",
     pdf_name=lab_guide_name,
+    require_api=1,
 )
 raise SystemExit(run(site))
 ```
@@ -423,8 +424,10 @@ and untouched. Add the PyYAML install step.
 of `cap_image_widths`, `normalize_table_columns`, `decode_image_paths`,
 `validate_notebooks` and `resolve_variables`, all now core. Adds
 `_quarto-typst.yml` with `render: ["**/*.qmd"]` so the Typst pass skips its
-ten notebooks instead of compiling and deleting them. Its build doc's note
-that only lab guides are renamed stays true.
+ten notebooks instead of compiling and deleting them. The rename matches on
+the directory name, so the `teaching-notes/labN/` pages are renamed as well
+as the lab guides, and always were; its instructor doc said lab guides only
+and is corrected in the same PR.
 
 **PHYS-4430.** Keeps `pdf_name=naming.prefixed("phys4430")`, which is its
 own scheme moved into the core because it is the general one; the page with
@@ -499,8 +502,9 @@ and implemented in v0.3.0.
    `build.py`, and PyPA's `build` is on many machines.
 2. **Naming.** PHYS-1140 fixes its pattern to `lab-(\d+)` so students
    download `phys1140-lab01.pdf`; the platform resolves it as the single PDF
-   in the directory, as PHYS-3330's are. PHYS-3330 renames lab guides only,
-   as its doc says, and keeps every other page at its stem.
+   in the directory, as PHYS-3330's are. PHYS-3330 renames every
+   `labN/index.qmd` (lab guides and teaching notes, as its old script did)
+   and keeps every other page at its stem.
 3. **`normalize_table_columns`** is on by default. A course that wants
    auto-width tables removes the filter through `typ_filters`.
 4. **Hard failures.** Missing PyYAML with a `_variables.yml` present fails

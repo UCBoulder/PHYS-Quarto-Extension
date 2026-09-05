@@ -267,11 +267,13 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
    `physicslabs_build/` directory.
 
 2. Before touching `build.py`, record the deploy branch's PDF list; it is the
-   post-merge check:
+   post-merge check. Name the file after the course: two migrations run on
+   one machine (PHYS-3330's and 4430's were) otherwise overwrite each other's
+   list, and the diff in step 8 then compares two different courses.
 
    ```sh
    git fetch origin deploy/django
-   git ls-tree -r --name-only origin/deploy/django | grep '\.pdf$' | sort > /tmp/pdfs-before.txt
+   git ls-tree -r --name-only origin/deploy/django | grep '\.pdf$' | sort > /tmp/pdfs-before-phys3330.txt
    ```
 
 3. Replace `build.py` with the wrapper. This is the whole file for a site with
@@ -310,11 +312,14 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
 4. Add the course's own hooks to the `Site`. What each repository keeps
    (build-core.md, section 4):
 
-   - **PHYS-3330**: `pdf_name=` a function that renames
-     `lab-guides/labN/index.qmd` to `phys3330-labN.pdf` and leaves every other
-     page at its stem (the example wrapper in build-core.md, section 2). Add
-     `_quarto-typst.yml` with `project: render: ["**/*.qmd"]` so the Typst
-     pass skips the notebooks. Everything else in the old script is core now.
+   - **PHYS-3330**: `pdf_name=` a function that renames every
+     `labN/index.qmd` to `phys3330-labN.pdf` and leaves every other page at
+     its stem (the example wrapper in build-core.md, section 2). Match on the
+     parent directory's name, not on `lab-guides/`: the old script did, so
+     the ten `teaching-notes/labN/` pages are renamed too, and the deploy
+     branch's PDF list (step 8) depends on it. Add `_quarto-typst.yml` with
+     `project: render: ["**/*.qmd"]` so the Typst pass skips the notebooks.
+     Everything else in the old script is core now.
    - **PHYS-4430**: `pdf_name=naming.prefixed("phys4430")`; import `naming`
      with `Site` and `run`. The core gains it notebook validation, the width
      cap and the table normalization.
@@ -381,7 +386,7 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
 
    ```sh
    git fetch origin deploy/django
-   git ls-tree -r --name-only origin/deploy/django | grep '\.pdf$' | sort | diff /tmp/pdfs-before.txt -
+   git ls-tree -r --name-only origin/deploy/django | grep '\.pdf$' | sort | diff /tmp/pdfs-before-phys3330.txt -
    ```
 
    No output means the same PDFs at the same paths. PHYS-1140 is the
