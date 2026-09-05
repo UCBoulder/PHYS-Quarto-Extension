@@ -48,6 +48,9 @@ physicslabs:
 
 Add `/_physicslabs-sidebar.yml` to the site's `.gitignore`; see below.
 
+Moving an existing course site off its hand-maintained theme is a longer
+recipe: see [docs/adopting-a-course-site.md](docs/adopting-a-course-site.md).
+
 ## What it provides
 
 - **`project: type: physicslabs`** sets the website defaults every course site
