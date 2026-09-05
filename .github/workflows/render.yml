@@ -4,10 +4,20 @@ name: Render fixture
 # ./_extensions, on the Quarto release the course sites pin. A platform
 # stylesheet change that breaks the bridge, or a filter error, fails here
 # rather than in a course repository.
+#
+# A pushed v* tag also publishes the GitHub release once that render passes,
+# with the tag annotation as the notes. The platform's sync workflow pushes such
+# tags over a deploy key after every stylesheet change; a hand-made release only
+# needs the version bump and an annotated tag. `quarto update` in a course
+# repository installs the latest release. The release job skips tags that
+# already have one, so re-run it if it fails.
 
 on:
   push:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   render:
@@ -44,3 +54,28 @@ jobs:
           grep -q 'course: "Fixture Course"' guide/elements.typ
           ! grep -qE '^\s*set math\.equation\(numbering' guide/elements.typ
           echo "fixture rendered with chrome, sidebar, bridge stylesheet, and stamped PDFs"
+
+  release:
+    needs: render
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish the release for this tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -e
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release $TAG already exists"
+            exit 0
+          fi
+          # actions/checkout leaves an annotated tag lightweight in the clone;
+          # refetch it so the notes come from the annotation.
+          git fetch --force origin "refs/tags/$TAG:refs/tags/$TAG"
+          gh release create "$TAG" --verify-tag --title "$TAG" --notes-from-tag
+          echo "published $TAG"

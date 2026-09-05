@@ -106,8 +106,14 @@ The chrome filter only acts on HTML output.
   looks for a sibling `PHYS-Undergraduate-Labs-Web` checkout.
 - `python tools/gen-logos.py` regenerates `filters/logos.lua` after a logo in
   `_extensions/physicslabs/assets/img/` changes.
-- Bump `version` in `_extensions/physicslabs/_extension.yml` and tag the
-  release (`vX.Y.Z`) so course sites can pin it.
+- A stylesheet change on the platform's `main` syncs itself: the platform's
+  `sync-quarto-extension` workflow runs `tools/sync-css.py`, bumps the patch
+  version, and pushes the commit and an annotated `vX.Y.Z` tag over a deploy
+  key. Pull before committing here; that sync may have advanced `main`.
+- Pushing any `v*` tag makes CI publish the GitHub release once the fixture
+  renders. A hand-made release is: bump `version` in
+  `_extensions/physicslabs/_extension.yml`, commit, `git tag -a vX.Y.Z`, and
+  push both.
 - `quarto render` at the repository root renders the fixture site in `guide/`,
   which exercises every element the platform styles. CI does the same on every
   push.
