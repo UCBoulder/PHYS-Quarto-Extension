@@ -95,11 +95,29 @@ package inside this extension is [docs/build-core.md](docs/build-core.md).
   course in the HTML header and on every PDF page. The template is the union
   of the fixes the course repositories had accumulated separately: figures are
   capped at a maximum height, code blocks keep their gold fill, and only
-  labeled equations are numbered, as in the HTML. Course build scripts keep
-  the `.typ`, post-process it, and compile with standalone Typst for
-  PDF/UA-1; that part stays in each repository.
+  labeled equations are numbered, as in the HTML. The build core below keeps
+  the `.typ`, post-processes it, and compiles it with standalone Typst for
+  PDF/UA-1.
 
 The chrome filter only acts on HTML output.
+
+## Build core
+
+`_extensions/physicslabs/physicslabs_build/` is the build pipeline the course
+sites share: tool discovery, the source passes (page dates from git history,
+`{{< var >}}` resolution, notebook validation), the `.typ` post-processor
+that gives every image and equation the alt text PDF/UA-1 requires, and the
+HTML and PDF renders. A course site's `site/build.py` is a thin wrapper that
+puts the installed extension on `sys.path`, describes the project as a
+`Site` with its own hooks, and calls `run`; `quarto add` installs the package
+with the rest of the extension and `quarto update` upgrades it. The flags are
+the ones the course scripts always had: `--html`, `--pdf`, `--ci`, `-v`, and
+`--course-data` where the site registers a generator.
+
+`build.py` at this repository's root is the reference wrapper and builds the
+fixture. The design, the API, and what each course's wrapper keeps are in
+[docs/build-core.md](docs/build-core.md); moving a site onto the core is
+section 13 of the adoption runbook. Unit tests: `python -m pytest tests/`.
 
 ## Maintenance
 
@@ -116,9 +134,13 @@ The chrome filter only acts on HTML output.
   renders. A hand-made release is: bump `version` in
   `_extensions/physicslabs/_extension.yml`, commit, `git tag -a vX.Y.Z`, and
   push both.
-- `quarto render` at the repository root renders the fixture site in `guide/`,
-  which exercises every element the platform styles. CI does the same on every
-  push.
+- `python build.py -v` at the repository root builds the fixture site in
+  `guide/` through the build core, HTML and PDF/UA-1 PDFs, which exercises
+  every element the platform styles and every post-processing step. CI runs
+  the unit tests, that build (the working tree must be clean afterwards), and
+  a `--ci` build on every push. Standalone Typst 0.14 and PyYAML are needed
+  locally; `quarto render` alone still renders the fixture without the PDF
+  post-processing.
 
 ## Layout
 
@@ -136,7 +158,10 @@ _extensions/physicslabs/
   nav-to-sidebar.py       pre-render: _nav.yml -> _physicslabs-sidebar.yml
   typst/                  typst-template.typ, typst-show.typ (accessible-PDF format)
   fonts/                  Roboto for the Typst build (Condensed is HTML-only, via Google Fonts)
+  physicslabs_build/      the build core: cli, site, tools, sources, typ, pdf, html, naming
   assets/img/             logo sources
+build.py                  reference wrapper; builds the fixture through the core
+tests/                    unit tests for the build core (not installed into course sites)
 tools/                    maintainer scripts (not installed into course sites)
-_quarto.yml, _nav.yml, index.qmd, guide/   fixture site rendered by CI
+_quarto.yml, _nav.yml, index.qmd, guide/   fixture site built by CI
 ```

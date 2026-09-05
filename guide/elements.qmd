@@ -29,6 +29,20 @@ print(x)
 
 Inline code like `curve_fit` sits in prose.
 
+A dollar sign inside a code block is text, not math:
+
+```python
+ax.set_xlabel("$V$ (V)")   # matplotlib reads the $...$ itself
+```
+
+## Figures
+
+![A Gaussian beam profile.](beam-profile.png){#fig-beam fig-alt="Intensity profile of a Gaussian beam, brightest at the center and fading toward every edge."}
+
+@fig-beam is cross-referenced.
+
+![A plot declared wider than the page.](wide-plot.png){fig-alt="A horizontal gradient from dark on the left to light on the right." width="20cm"}
+
 ## Tables
 
 | Quantity | Symbol | Unit |
@@ -47,6 +61,23 @@ Inline $E = h\nu$ and display:
 $$ I(x) = \frac{I_0}{2}\left[1 - \operatorname{erf}\left(\frac{\sqrt{2}\,x}{w}\right)\right] $$ {#eq-knife}
 
 @eq-knife is the knife-edge model.
+
+An unlabeled display equation carries no number:
+
+$$ E = m c^2 $$
+
+An aligned derivation spans lines:
+
+$$
+\begin{aligned}
+P &= I V \\
+  &= I^2 R
+\end{aligned}
+$$
+
+A boxed result:
+
+$$ \boxed{F = m a} $$
 
 ## Task list
 
