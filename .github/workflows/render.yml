@@ -23,11 +23,11 @@ jobs:
         with:
           version: "1.9.38"
 
-      - name: Render HTML
-        run: quarto render --to html
-
-      - name: Render Typst
-        run: quarto render --to typst
+      # One render of every format the extension contributes. Rendering the
+      # formats separately does not work: a project render cleans _site first,
+      # so the second format's run removes the first format's output.
+      - name: Render HTML and Typst
+        run: quarto render
 
       - name: Check the output
         run: |
