@@ -50,6 +50,8 @@ Add `/_physicslabs-sidebar.yml` to the site's `.gitignore`; see below.
 
 Moving an existing course site off its hand-maintained theme is a longer
 recipe: see [docs/adopting-a-course-site.md](docs/adopting-a-course-site.md).
+The design for moving the course sites' `build.py` pipelines into a shared
+package inside this extension is [docs/build-core.md](docs/build-core.md).
 
 ## What it provides
 
