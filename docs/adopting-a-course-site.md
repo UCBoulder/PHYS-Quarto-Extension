@@ -322,7 +322,15 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
      Everything else in the old script is core now.
    - **PHYS-4430**: `pdf_name=naming.prefixed("phys4430")`; import `naming`
      with `Site` and `run`. The core gains it notebook validation, the width
-     cap and the table normalization.
+     cap and the table normalization. The validation fails its first build:
+     the four notebooks under `lab-guides/michelson-interferometer/validation/`
+     opened with a markdown cell (one with a raw cell holding only
+     `execute: enabled: false`), yet the platform renders them as pages,
+     taking the title from the body heading and showing no date. Give each a
+     raw first cell of `---`, `title: "<its H1 text>"`, `---` before the
+     build; rewriting the JSON with `indent=1, sort_keys=True,
+     ensure_ascii=False` keeps the diff to the added cell. The same applies
+     to any repository whose notebooks deploy without frontmatter.
    - **PHYS-1140**: `course_data=generate_course_data`, an explicit
      `source_passes` list (`resolve_weekly` before `sources.stamp_dates`, then
      `stamp_visibility`, `stamp_course_data`), and a `pdf_name` hook whose
