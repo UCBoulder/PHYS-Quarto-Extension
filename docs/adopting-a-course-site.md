@@ -144,7 +144,12 @@ the repository has no such shortcodes.
 
 - `python build.py --html` succeeds; every page in `_site/` contains
   `class="cu-header"`.
-- `python build.py --pdf` succeeds (Typst is unaffected, but prove it).
+- `python build.py --pdf` succeeds (Typst is unaffected, but prove it). If it
+  aborts within seconds on a Typst package such as `fontawesome` ("file not
+  found" under `.quarto/typst/packages`), the local Quarto cache is stale:
+  delete `site/.quarto` and rerun. On Windows, `build.py` can then die with a
+  `charmap` encoding traceback while echoing that Typst error; set
+  `PYTHONIOENCODING=utf-8` for the run. Neither is caused by the extension.
 - The render log shows `physicslabs: sidebar from _nav.yml (N entries, ...)`
   and no "path not found" lines.
 - `quarto preview`: follow sidebar links (the page must change), toggle dark
