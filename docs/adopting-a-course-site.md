@@ -62,7 +62,10 @@ Keep:
 
 - `website.title`, `website.favicon`
 - `format.typst` and `_quarto-typst.yml`; the PDF build is untouched
-- course-specific `format.html` keys such as a Lua `filters` list
+- course-specific `format.html` keys such as a Lua `filters` list. A
+  top-level `filters` list is fine too: both merge with the extension's
+  `format.html.filters`, so the course filter and `chrome.lua` run on every
+  page (PHYS-1140 declares its `notebook.lua` that way).
 
 Add:
 
@@ -87,7 +90,9 @@ site/assets/img/cu_boulder-white.svg
 Keep `site/assets/fonts/` (the Typst template reads it) and the favicon.
 Before deleting, grep the repository for `assets/css`, `assets/html`,
 `assets/img`, `custom.scss` and `header.html` to be sure nothing else refers to
-them. Course-specific rules found in `custom.scss` are one of three things:
+them. The grep misses prose: `site/CLAUDE.md` and `site/README.md` usually
+describe the old theme in a styling section or a directory tree (`css/`,
+`html/`, `img/` under `assets/`); rewrite those to point at the extension. Course-specific rules found in `custom.scss` are one of three things:
 chrome the extension already has, content styling that belongs on the platform
 if it belongs anywhere, or page styling the page should embed itself. None of
 it moves into the course repository's config.
@@ -139,6 +144,9 @@ the repository has no such shortcodes.
   stays in the repository. Copy PHYS-4700's section and adjust names.
 - `CLAUDE.md`: a sentence in the `site/` bullet pointing at the extension and
   forbidding content styling in the course repository.
+- Wherever the course docs state a minimum Quarto version (the build-and-deploy
+  page's prerequisites table, `site/CLAUDE.md`), make it 1.9. The extension
+  declares `quarto-required: ">=1.9.0"`; 1.4+ was the usual figure before.
 
 ## 9. Verify
 
