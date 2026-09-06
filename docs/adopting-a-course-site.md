@@ -349,12 +349,15 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
      core's runs because `_variables.yml` exists.
    - **PHYS-2150**: `course_data=generate_course_data` and the explicit list
      `[sources.validate_notebooks, resolve_weekly, resolve_syllabus,
-     sources.stamp_dates, stamp_rubrics, stamp_course_data,
-     stamp_visibility]`. `resolve_weekly` and `resolve_syllabus` call
-     `ws.add_date_dep(page, *partials)` instead of returning tuples, and a
-     small pass before `stamp_dates` registers the rubric YAMLs the same way,
-     so the instructor guide's date still follows its sources. The
-     lab-guide warning goes; the gate covers it.
+     register_rubric_deps, sources.stamp_dates, stamp_rubrics,
+     stamp_course_data, stamp_visibility]`. `resolve_weekly` and
+     `resolve_syllabus` call `ws.add_date_dep(page, *partials)` instead of
+     returning tuples, and `register_rubric_deps` is a small pass of its own
+     that registers each page's rubric YAMLs the same way, read off the
+     still-unresolved `{{< rubric >}}` shortcodes: the old `stamp_dates` did
+     that itself, the core's reads only `ws.date_deps`, and `stamp_rubrics`
+     runs too late to do it. A rubric edit thus still moves the date of every
+     page embedding it. The lab-guide warning goes; the gate covers it.
 
    Every course pass takes `(ws, verbose)`, reads through `ws.read`, writes
    through `ws.write`, and raises `physicslabs_build.BuildError` to stop the

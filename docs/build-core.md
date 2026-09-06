@@ -401,12 +401,14 @@ PHYS-3330 and 4430 already carry.
 
 **PHYS-2150.** Keeps `generate_course_data`, `resolve_weekly` (now calling
 `ws.add_date_dep` for each inlined partial instead of returning a tuple),
-`resolve_syllabus`, `stamp_rubrics` and `_rubric_deps` (also registering
-deps), the plain `stamp_course_data` resolver and the week-keyed
-`stamp_visibility`. Its explicit pass list, preserving today's order:
-`[validate_notebooks, resolve_weekly, resolve_syllabus, stamp_dates,
-stamp_rubrics, stamp_course_data, stamp_visibility]`. Loses the lab-guide
-warning (subsumed by the gate) and `_commit_date`, `_format_date`,
+`resolve_syllabus`, `stamp_rubrics`, `_rubric_deps` (now a pass of its own,
+`register_rubric_deps`: its old caller was `stamp_dates`, whose core version
+reads only `ws.date_deps`, and `stamp_rubrics` runs after the stamp), the
+plain `stamp_course_data` resolver and the week-keyed `stamp_visibility`. Its
+explicit pass list, preserving today's order:
+`[validate_notebooks, resolve_weekly, resolve_syllabus, register_rubric_deps,
+stamp_dates, stamp_rubrics, stamp_course_data, stamp_visibility]`. Loses the
+lab-guide warning (subsumed by the gate) and `_commit_date`, `_format_date`,
 `kept_typ_files`, which become the core's. Keeps `_quarto-typst.yml`.
 
 **PHYS-1140.** Keeps `generate_course_data` and `check_weekly_lectures`, its
