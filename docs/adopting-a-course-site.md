@@ -177,7 +177,10 @@ the repository has no such shortcodes.
   shows the abort, check its scan before assuming a cache problem. On Windows,
   `build.py` can die with a
   `charmap` encoding traceback while echoing that Typst error; set
-  `PYTHONIOENCODING=utf-8` for the run. Neither is caused by the extension.
+  `PYTHONIOENCODING=utf-8` for the run. Neither is caused by the extension,
+  and neither survives the move to the v0.3.0 build core (section 13): the
+  core's scan excludes `.quarto/` and `_extensions/`, and it reconfigures the
+  console to UTF-8 itself.
 - The render log shows `physicslabs: sidebar from _nav.yml (N entries, ...)`
   and no "path not found" lines.
 - `quarto preview`: follow sidebar links (the page must change), toggle dark
@@ -356,7 +359,12 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
    Every course pass takes `(ws, verbose)`, reads through `ws.read`, writes
    through `ws.write`, and raises `physicslabs_build.BuildError` to stop the
    build. Course data must read YAML through `sources.load_yaml`, which fails
-   the build when PyYAML is missing rather than skipping.
+   the build when PyYAML is missing rather than skipping. The generator also
+   writes YAML, which `load_yaml` does not cover: guard its own `import yaml`
+   and raise `BuildError` when it fails. In v0.3.0 `run()` calls the
+   `course_data` generator before its `BuildError` handler, so an error
+   raised there ends in a traceback rather than the one-line message; the
+   build still fails, and before any source is touched.
 
 5. In both workflows (`quarto.yml`, `pr-check.yml`), add the step PHYS-3330
    and 4430 already have, before the build:
