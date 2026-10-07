@@ -617,8 +617,8 @@
        dark bars. Depth also comes from the 1rem-per-level indentation.
 
        Light mode runs the gold family down the ladder: solid gold parent, pale
-       gold child. That puts the page's existing gold — the Demo Bot button, the
-       carousel arrows — in the sidebar too, which is what you see first, since
+       gold child. That puts the page's existing gold — the carousel arrows — in
+       the sidebar too, which is what you see first, since
        every level 1 is collapsed on load. It also puts the heavier fill on the
        parent, where it belongs; the reverse read as a child outranking its own
        parent. --ucb-gold clears the --bg-secondary panel at 1.85:1, so level 1
@@ -805,37 +805,6 @@
 
     /* Navbar */
     --bs-navbar-active-color: var(--nav-active-text);
-
-    /* AI Cart Builder Chat Colors (Light Mode) */
-    --chat-user-bg: var(--ucb-link-blue);
-    --chat-user-text: var(--ucb-white);
-    --chat-assistant-bg: var(--gray-200);
-    --chat-assistant-text: var(--text-primary);
-    --chat-border: var(--border-color);
-    --chat-input-bg: var(--bg-elevated);
-    --chat-input-border: var(--border-color);
-    --chat-input-focus-border: var(--ucb-link-blue);
-    --chat-typing-dot: var(--text-tertiary);
-
-    /* Calendar Grid (Date Picker) */
-    --calendar-today-ring: var(--ucb-gold);
-    --calendar-selected-bg: var(--btn-primary-bg);
-    --calendar-selected-text: var(--btn-primary-text);
-    --calendar-class-dot: var(--ucb-gold);
-    --calendar-hover-bg: var(--bg-secondary);
-    --chat-item-bg: var(--bg-elevated);
-    --chat-item-border: var(--border-color);
-    --chat-item-selected-bg: var(--ucb-light-blue);
-    --chat-item-selected-border: var(--ucb-link-blue);
-    --chat-item-selected-glow: rgba(2, 119, 189, 0.2);
-
-    /* Badge colors for confidence levels (Light Mode) */
-    --badge-confidence-high: var(--green-100);    /* 80-100% match - light green bg */
-    --badge-confidence-high-text: var(--ucb-black);  /* Black text for contrast */
-    --badge-confidence-medium: var(--yellow-100);  /* 60-79% match - light yellow bg */
-    --badge-confidence-medium-text: var(--ucb-black);  /* Black text */
-    --badge-confidence-low: var(--red-100);     /* <60% match - light red bg */
-    --badge-confidence-low-text: var(--ucb-black);  /* Black text */
 
     /* Generic badge (used for item counts, etc.) */
     --badge-default-bg: #e3f2fd;                  /* Light blue background */
@@ -1197,26 +1166,6 @@
     --inline-gray-light: var(--gray-900); /* Inverted for dark mode */
     --inline-gray-medium: #aaaaaa;        /* Inverted for dark mode */
     --inline-gray-dark: #cccccc;          /* Inverted for dark mode */
-
-    /* AI Cart Builder Chat Colors (Dark Mode) */
-    --chat-user-bg: var(--ucb-gold);
-    --chat-user-text: var(--ucb-black);
-    --chat-assistant-bg: var(--gray-900);
-    --chat-assistant-text: var(--gray-100);
-    --chat-item-selected-bg: var(--gray-800);
-    --chat-item-selected-border: var(--ucb-gold);
-    --chat-item-selected-glow: rgba(207, 184, 124, 0.2);
-
-    /* Calendar Grid (Dark Mode) */
-    --calendar-hover-bg: var(--gray-800);
-
-    /* Badge colors for confidence levels (Dark Mode) */
-    --badge-confidence-high: var(--green-800);    /* 80-100% match - dark green bg */
-    --badge-confidence-high-text: var(--green-100);  /* Light green text for contrast */
-    --badge-confidence-medium: var(--yellow-800);  /* 60-79% match - dark yellow bg */
-    --badge-confidence-medium-text: var(--yellow-100);  /* Light yellow text */
-    --badge-confidence-low: var(--red-800);     /* <60% match - dark red bg */
-    --badge-confidence-low-text: var(--red-100);  /* Light red text */
 
     /* Generic badge (used for item counts, etc.) - Dark Mode */
     --badge-default-bg: #1a3d5c;                  /* Dark blue background */
