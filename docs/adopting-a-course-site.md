@@ -92,7 +92,7 @@ site/assets/img/cu_boulder-white.svg
 Keep `site/assets/fonts/` (the Typst template reads it) and the favicon.
 Before deleting, grep the repository for `assets/css`, `assets/html`,
 `assets/img`, `custom.scss` and `header.html` to be sure nothing else refers to
-them. The grep misses prose: `site/CLAUDE.md` and `site/README.md` usually
+them. The grep misses prose: `site/AGENTS.md` and `site/README.md` usually
 describe the old theme in a styling section or a directory tree (`css/`,
 `html/`, `img/` under `assets/`); rewrite those to point at the extension. Course-specific rules found in `custom.scss` are one of three things:
 chrome the extension already has, content styling that belongs on the platform
@@ -149,10 +149,10 @@ the repository has no such shortcodes.
 - The build-and-deploy page: a "Site theme" section saying where the look
   comes from, how to update the extension, the install-order gotcha, and what
   stays in the repository. Copy PHYS-4700's section and adjust names.
-- `CLAUDE.md`: a sentence in the `site/` bullet pointing at the extension and
+- `AGENTS.md`: a sentence in the `site/` bullet pointing at the extension and
   forbidding content styling in the course repository.
 - Wherever the course docs state a minimum Quarto version (the build-and-deploy
-  page's prerequisites table, `site/CLAUDE.md`), make it 1.9. The extension
+  page's prerequisites table, `site/AGENTS.md`), make it 1.9. The extension
   declares `quarto-required: ">=1.9.0"`; 1.4+ was the usual figure before.
 
 ## 9. Verify
@@ -238,10 +238,10 @@ Sites adopted on v0.1.0 need one more PR. From `site/`:
 7. The deploy workflow's font copy (`assets/fonts` to the deploy branch, where
    present) can go; the platform serves the CI-built PDFs and never compiles
    Typst.
-8. Update the docs that named the removed paths. Grep `site/`, `CLAUDE.md` and
+8. Update the docs that named the removed paths. Grep `site/`, `AGENTS.md` and
    `README.md` for `assets/fonts` and `_extensions/cu-boulder`: the
    build-and-deploy page's "what stays in this repo" bullet, the structure and
-   PDF-styling notes in `site/CLAUDE.md`, and the directory tree in
+   PDF-styling notes in `site/AGENTS.md`, and the directory tree in
    `site/README.md`. Copy PHYS-4700's "PDFs use the extension too" bullet.
 
 ### v0.2.1: install this rather than v0.2.0
@@ -310,7 +310,7 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
    core change fail with one line instead of a traceback; always pass it.
    Point the docstring's last sentence at wherever the repository keeps its
    build notes: PHYS-Python-Resources has no build-and-deploy page, so its
-   wrapper cites the Build section of `CLAUDE.md`.
+   wrapper cites the Build section of `AGENTS.md`.
 
 4. Add the course's own hooks to the `Site`. What each repository keeps
    (build-core.md, section 4):
@@ -383,11 +383,11 @@ and 4430 (naming hooks), then 4700, 1140 and 2150 (course data).
 6. Rewrite the docs that described the old script: the "What build.py does"
    section of the build-and-deploy page (the steps are unchanged, the code
    lives in the extension, and `Requirements` gains PyYAML), the `build.py`
-   bullet in `CLAUDE.md`, and the tree in `site/README.md`. PHYS-4700's
+   bullet in `AGENTS.md`, and the tree in `site/README.md`. PHYS-4700's
    troubleshooting row that blames a stale `.quarto` cache for the
    fontawesome abort describes PHYS-2150's old bug; delete it.
    PHYS-Python-Resources has neither a build-and-deploy page nor a
-   `site/README.md`: its build notes are the Build section of `CLAUDE.md`
+   `site/README.md`: its build notes are the Build section of `AGENTS.md`
    and, in `site/docs/scope-and-conventions.qmd`, the "PDFs use the
    extension too" bullet plus the shortcode-resolution callout that sent
    courses to PHYS-4430's `resolve_variables()` as the reference

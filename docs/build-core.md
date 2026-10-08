@@ -382,7 +382,7 @@ explicit PyYAML install where one is missing (section 4).
 
 Each site's wrapper keeps only what is its own. Every migration also deletes
 the copied functions, rewrites the "What build.py does" section of its build
-doc and the `build.py` bullet in `CLAUDE.md`, and adds
+doc and the `build.py` bullet in `AGENTS.md`, and adds
 `sys.dont_write_bytecode = True` so nothing lands under `_extensions/`
 (all six already ignore `__pycache__/`).
 
