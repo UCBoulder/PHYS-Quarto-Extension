@@ -206,6 +206,15 @@
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
     --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    /* Shadows the scale can't express: text over a photo, a bottom sheet's
+       upward edge, a right-hand drawer's left edge, and drop-shadow(), which
+       takes no spread. */
+    --text-shadow-on-photo: 0 2px 8px rgb(0 0 0 / 0.5);
+    --text-shadow-on-photo-sm: 0 1px 3px rgb(0 0 0 / 0.6);
+    --text-shadow-sm: 2px 2px 4px rgb(0 0 0 / 0.1);
+    --drop-shadow-md: drop-shadow(0 4px 6px rgb(0 0 0 / 0.2));
+    --shadow-up: 0 -2px 12px rgb(0 0 0 / 0.25);
+    --shadow-left: -4px 0 12px rgb(0 0 0 / 0.3);
 
     /* ===== Z-INDEX SCALE ===== */
     --z-base: 0;
@@ -389,7 +398,7 @@
     --color-link-focus-bg: rgba(0, 102, 204, 0.15);
     --color-link-active-bg: rgba(0, 102, 204, 0.2);
 
-    --color-focus: var(--ucb-gold);
+    --color-focus: var(--focus-outline-color);
     --color-accent: var(--ucb-gold);
     --drop-target-bg: var(--ucb-light-gold);   /* a file drop zone while something is dragged over it */
 
@@ -563,6 +572,11 @@
     --form-disabled-bg: var(--gray-100);
     --form-disabled-text: var(--gray-600);
     --form-required-color: var(--color-danger);
+    /* An inline SVG icon cannot read a variable, so the whole image is the
+       token. Only the dark rules read these two; the light values are
+       Bootstrap's own, which light mode renders. */
+    --form-select-indicator: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    --form-check-checked-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 
     /* Legacy form variables */
     --form-input-text: var(--form-text);
@@ -790,7 +804,11 @@
     --focus-outline-width: var(--border-3);
     --focus-outline-offset: var(--border-2);
     --focus-outline-style: solid;         /* Legacy variable for focus outline style */
-    --focus-outline-color: var(--ucb-gold);
+    /* A focus indicator needs 3:1 against what it sits on. Brand gold is
+       1.94:1 on white, so light mode takes the darker text gold (4.19:1 on
+       --bg-tertiary, the lightest surface it meets). test_focus_indicators.py
+       measures every surface in both themes. */
+    --focus-outline-color: var(--ucb-gold-text);
     --focus-shadow: 0 0 0 0.25rem rgba(207, 184, 124, 0.25);
     --shadow-focus: var(--focus-shadow);  /* Legacy alias */
 }
@@ -1027,6 +1045,8 @@
     --form-placeholder-text: var(--gray-600);
     --form-border-error: #ff6666;
     --form-required-color: #ff6b6b;
+    --form-select-indicator: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23adb5bd' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    --form-check-checked-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 
     --table-bg: var(--gray-950);
     --table-border: var(--gray-700);
@@ -1102,8 +1122,14 @@
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6);
     --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.7);
+    --text-shadow-on-photo: 0 2px 8px rgb(0 0 0 / 0.5);
+    --text-shadow-on-photo-sm: 0 1px 3px rgb(0 0 0 / 0.6);
+    --text-shadow-sm: 2px 2px 4px rgb(0 0 0 / 0.1);
+    --drop-shadow-md: drop-shadow(0 4px 6px rgb(0 0 0 / 0.2));
+    --shadow-up: 0 -2px 12px rgb(0 0 0 / 0.25);
+    --shadow-left: -4px 0 12px rgb(0 0 0 / 0.3);
     --focus-shadow: 0 0 0 0.25rem rgba(207, 184, 124, 0.4);
-    --focus-outline-color: var(--ucb-gold);
+    --focus-outline-color: var(--ucb-gold-text);
 
     /* ===== COMPONENT-SPECIFIC (Dark Mode) ===== */
     --conflict-warning-bg: var(--yellow-800);

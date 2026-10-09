@@ -25,7 +25,7 @@
 }
 
 /* High contrast mode support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
     .cross-reference {
         text-decoration: underline;
     }

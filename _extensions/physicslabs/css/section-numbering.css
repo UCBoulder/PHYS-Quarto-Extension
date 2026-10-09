@@ -111,14 +111,6 @@ h6.heading-block,
     }
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .section-number {
-        font-weight: 900;
-        text-decoration: underline;
-    }
-}
-
 /* Dark mode: heading and number colours come from the variables above; only
    the lingering target highlight is dark-specific. */
 [data-theme="dark"] .heading-block[id]:target {

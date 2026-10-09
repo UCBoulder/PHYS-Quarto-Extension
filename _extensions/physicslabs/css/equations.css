@@ -126,18 +126,6 @@
     }
 }
 
-/* High contrast mode */
-@media (prefers-contrast: high) {
-    .equation-content {
-        border: 1px solid currentColor;
-        padding: 0.25rem 0.5rem;
-    }
-    
-    .equation-caption {
-        font-weight: bold;
-    }
-}
-
 /* Reduced motion - no animations on equations */
 @media (prefers-reduced-motion: reduce) {
     .equation-content {

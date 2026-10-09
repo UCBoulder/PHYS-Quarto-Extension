@@ -237,7 +237,7 @@
    High Contrast Mode
    ========================================== */
 
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
     .code-block-container {
         border-width: 2px;
     }

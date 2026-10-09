@@ -13,7 +13,7 @@
     overflow: hidden;
     position: relative;
     padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
     /* Fix sub-pixel rendering artifacts at rounded corners */
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -105,7 +105,7 @@
     transform: translateY(-50%) translateZ(0);
     width: 48px;
     height: 48px;
-    background: rgba(255, 255, 255, 0.9);
+    background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
     border: 1px solid var(--border-color);
     border-radius: 50%;
     display: flex;
@@ -122,13 +122,13 @@
 
 .figure-gallery-nav:hover {
     opacity: 1;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-lg);
 }
 
 .figure-gallery-nav:focus {
     opacity: 1;
-    outline: 3px solid var(--ucb-gold);
+    outline: 3px solid var(--focus-outline-color);
     outline-offset: 2px;
 }
 
@@ -141,18 +141,9 @@
 }
 
 /* Dark mode styles */
-[data-theme="dark"] .figure-gallery {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
 [data-theme="dark"] .figure-gallery-nav {
-    background: rgba(42, 42, 42, 0.9);
     border-color: var(--border-color);
     color: var(--text-primary);
-}
-
-[data-theme="dark"] .figure-gallery-nav:hover {
-    background: rgba(42, 42, 42, 1);
 }
 
 /* Hidden by default - shown via JS */
