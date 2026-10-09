@@ -119,29 +119,8 @@ h6.heading-block,
     }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .heading-block {
-        color: var(--text-primary);
-    }
-
-    .section-number {
-        color: var(--color-link);
-    }
-
-    .heading-block[id]:target {
-        background-color: var(--color-link-hover-bg);
-    }
-}
-
-[data-theme="dark"] .heading-block {
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .section-number {
-    color: var(--color-link);
-}
-
+/* Dark mode: heading and number colours come from the variables above; only
+   the lingering target highlight is dark-specific. */
 [data-theme="dark"] .heading-block[id]:target {
     background-color: var(--color-link-hover-bg);
 }

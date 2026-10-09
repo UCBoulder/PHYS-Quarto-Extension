@@ -204,7 +204,7 @@ main.content h3,
 main.content h4,
 main.content h5,
 main.content h6 {
-    scroll-margin-top: calc(var(--header-height, 100px) + 1rem);
+    scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
 /* Section number styling */
@@ -722,7 +722,7 @@ main.content .cell.code .output.stream {
     border-radius: 0 0 var(--radius-md) var(--radius-md);
     padding: var(--spacing-3) var(--spacing-4);
     overflow-x: auto;
-    font-family: var(--font-family-monospace, monospace);
+    font-family: var(--font-family-monospace);
     font-size: 13px;
     line-height: var(--line-height-relaxed);
     color: var(--text-secondary);
@@ -880,7 +880,7 @@ main.content figure {
 
 /* Scroll offset for figure cross-references */
 main.content [id^="fig-"] {
-    scroll-margin-top: calc(var(--header-height, 100px) + 1rem);
+    scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
 /* All images — constrain to content column and preserve aspect ratio.
@@ -981,7 +981,7 @@ main.content .quarto-layout-panel figure {
 
 main.content .equation-container {
     margin: var(--spacing-4) 0;
-    scroll-margin-top: calc(var(--header-height, 100px) + 1rem);
+    scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
 main.content .equation-container > p {
@@ -1085,7 +1085,7 @@ main.content [id^="fig-"]:hover .quarto-figure-link,
 
 .crossref-preview {
     position: absolute;
-    z-index: var(--z-popover, 1070);
+    z-index: var(--z-popover);
     background-color: var(--bg-primary);
     border: var(--border-1) solid var(--border-color);
     border-radius: var(--radius-md);

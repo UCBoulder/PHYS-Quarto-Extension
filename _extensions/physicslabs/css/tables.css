@@ -207,52 +207,9 @@
     }
 }
 
-/* Dark mode support - both system preference AND manual toggle */
-@media (prefers-color-scheme: dark) {
-    .accessible-table {
-        background-color: var(--bg-primary);
-        border-color: var(--border-color);
-    }
-
-    .table-caption {
-        background-color: transparent;
-        color: var(--text-primary);
-    }
-
-    .table-number,
-    .table-caption-text {
-        color: var(--text-primary);
-    }
-
-    .accessible-table th {
-        background-color: var(--table-header-bg);
-        color: var(--text-primary);
-        border-color: var(--table-border);
-    }
-
-    .accessible-table td {
-        color: var(--text-primary);
-        border-color: var(--table-cell-border);
-    }
-
-    .accessible-table .table-row-number {
-        background-color: var(--table-row-number-bg);
-    }
-
-    .accessible-table tbody tr:nth-child(even) {
-        background-color: var(--table-row-even-bg);
-    }
-
-    .accessible-table tbody tr:nth-child(odd) {
-        background-color: var(--table-row-odd-bg);
-    }
-
-    .accessible-table tbody tr:hover {
-        background-color: var(--table-row-hover-bg);
-    }
-}
-
-/* Manual dark mode toggle support */
+/* Dark mode follows the site's theme toggle (html[data-theme]), which the Quarto
+   extension also sets from Quarto's own toggle, not the OS preference: the two
+   can disagree. */
 [data-theme="dark"] .accessible-table {
     background-color: var(--bg-primary);
     border-color: var(--border-color);

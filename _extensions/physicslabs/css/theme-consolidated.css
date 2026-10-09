@@ -217,6 +217,13 @@
     --z-tooltip: 1060;
     --z-popover: 1070;
 
+    /* ===== LAYOUT ===== */
+    /* Sticky header height, for sticky sidebars and anchor scroll offsets.
+       sticky-header.js overwrites it on <html> with the measured height; this
+       default covers the moment before it runs, and Quarto course sites, where
+       it never runs. */
+    --header-height: 100px;
+
     /* ===== TRANSITIONS ===== */
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -384,6 +391,7 @@
 
     --color-focus: var(--ucb-gold);
     --color-accent: var(--ucb-gold);
+    --drop-target-bg: var(--ucb-light-gold);   /* a file drop zone while something is dragged over it */
 
     /* ===== QUARTO CONTENT ===== */
     --section-number-color: var(--text-secondary);
@@ -894,6 +902,7 @@
     --color-link-hover: var(--ucb-gold-dark);
     --color-link-active: var(--ucb-gold-dark);
     --color-link-active-bg: rgba(207, 184, 124, 0.25);
+    --drop-target-bg: rgba(207, 184, 124, 0.15);
 
     /* ===== QUARTO CONTENT (Dark Mode) ===== */
     --section-number-color: var(--ucb-gold);
