@@ -463,7 +463,7 @@ main.content .nav-tabs {
 }
 
 main.content .nav-tabs .nav-link.active {
-    border-color: var(--ucb-gold) var(--ucb-gold) var(--bg-primary);
+    border-color: var(--ucb-gold-text) var(--ucb-gold-text) var(--bg-primary);
     color: var(--text-primary);
 }
 

@@ -561,7 +561,12 @@
     /* ===== FORMS ===== */
     --form-bg: var(--bg-primary);
     --form-text: var(--text-primary);
-    --form-border: var(--border-color);
+    /* A field filled like its surroundings is found by its border, which so
+       needs 3:1 against them (WCAG 2.1 AA 1.4.11). 5.74:1 on white, 5.27:1 on
+       --bg-tertiary. It was --border-color, the divider grey, at 1.36:1. Do
+       not lighten past --gray-600: --gray-500 is 2.85:1 on white.
+       test_form_field_borders.py measures it on every surface, both themes. */
+    --form-border: var(--gray-600);
     --form-border-focus: var(--color-focus);
     --form-border-error: var(--color-danger);
     --form-padding: var(--spacing-3);
@@ -1039,7 +1044,10 @@
 
     --form-bg: var(--gray-950);
     --form-text: var(--text-primary);
-    --form-border: var(--gray-700);
+    /* 5.58:1 on the page, 3.42:1 on the --gray-800 staff section headers,
+       the lightest surface a field sits on. Was --gray-700, 2.17:1 at best.
+       See the note on the light value in :root. */
+    --form-border: var(--gray-500);
     --form-disabled-bg: var(--gray-900);
     --form-disabled-text: var(--gray-600);
     --form-placeholder-text: var(--gray-600);
