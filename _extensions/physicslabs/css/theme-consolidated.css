@@ -381,6 +381,12 @@
     --color-highlight-bg: var(--purple-50);
     --color-highlight-text: var(--purple-700);
 
+    /* Chart series, used in this order (a J-V plot: forward, then reverse).
+       Validated as a pair for colour-vision deficiency and at 3:1 against
+       --card-bg; the dark steps are chosen for the dark surface, not flipped. */
+    --chart-series-1: #2a78d6;
+    --chart-series-2: #eb6834;
+
     /* Muted */
     --color-muted: var(--gray-500);
     --color-muted-bg: var(--gray-100);
@@ -957,6 +963,9 @@
 
     --color-highlight-bg: var(--purple-800);
     --color-highlight-text: #ce93d8;            /* Light purple for dark mode */
+
+    --chart-series-1: #3987e5;
+    --chart-series-2: #d95926;
 
     /* Light mode's --gray-200 (#eeeeee) is a near-white raised surface; unset
        here it leaked into dark mode as a white fill, and four separate rules
