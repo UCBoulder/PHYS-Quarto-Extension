@@ -300,8 +300,15 @@
     user-select: none;
 }
 
+/* Room for the 44px touch target plus its offset, so a one-line block
+   is tall enough to hold the button */
+.copy-btn-wrap > pre,
+.code-highlight:has(> .copy-btn-inline) > pre {
+    min-height: calc(var(--spacing-11) + 2 * var(--spacing-2));
+}
+
 .code-highlight:hover > .copy-btn-inline,
-pre:hover > .copy-btn-inline {
+.copy-btn-wrap:hover > .copy-btn-inline {
     opacity: 1;
 }
 

@@ -1241,9 +1241,26 @@ main.content a.crossref {
     user-select: none;
 }
 
+main.content .quarto-copy-wrap {
+    position: relative;
+}
+
+/* Room for the 44px touch target plus its offset, so a one-line block
+   is tall enough to hold the button */
+main.content div.sourceCode:has(> .quarto-copy-btn) > pre,
+main.content .quarto-copy-wrap > pre {
+    min-height: calc(var(--spacing-11) + 2 * var(--spacing-2));
+}
+
 div.sourceCode:hover .quarto-copy-btn,
-main.content pre[class]:not(.sourceCode):hover > .quarto-copy-btn {
+main.content .quarto-copy-wrap:hover > .quarto-copy-btn {
     opacity: 1;
+}
+
+.quarto-copy-btn:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
 }
 
 .quarto-copy-btn.copied {
