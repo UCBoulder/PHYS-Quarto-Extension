@@ -305,6 +305,7 @@
 .copy-btn-wrap > pre,
 .code-highlight:has(> .copy-btn-inline) > pre {
     min-height: calc(var(--spacing-11) + 2 * var(--spacing-2));
+    align-content: center;
 }
 
 .code-highlight:hover > .copy-btn-inline,

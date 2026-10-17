@@ -503,10 +503,11 @@ main.content div.sourceCode {
     border-color: var(--border-color);
 }
 
-/* Code blocks for languages Pandoc doesn't highlight (e.g., ```text).
-   Pandoc renders these as bare <pre class="lang"><code> without a
-   div.sourceCode wrapper. Give them the same visual treatment. */
-main.content pre[class]:not(.sourceCode) {
+/* Code blocks Pandoc doesn't highlight: a language it doesn't know
+   (e.g., ```text) gives a bare <pre class="lang"><code>, and no language
+   at all gives a bare <pre><code>. Neither has a div.sourceCode wrapper.
+   Give them the same visual treatment; notebook output keeps its own. */
+main.content pre:not(.sourceCode):not(.output pre) {
     position: relative;
     background-color: var(--gray-100);
     border: var(--border-1) solid var(--border-color-light);
@@ -519,19 +520,19 @@ main.content pre[class]:not(.sourceCode) {
     scrollbar-color: var(--scrollbar-thumb-bg) transparent;
 }
 
-[data-theme="dark"] main.content pre[class]:not(.sourceCode) {
+[data-theme="dark"] main.content pre:not(.sourceCode):not(.output pre) {
     background-color: var(--bg-tertiary);
     border-color: var(--border-color);
 }
 
-main.content pre[class]:not(.sourceCode) code {
+main.content pre:not(.sourceCode):not(.output pre) code {
     font-size: 14px;
     line-height: var(--line-height-relaxed);
     color: var(--text-primary);
     background: transparent;
 }
 
-[data-theme="dark"] main.content pre[class]:not(.sourceCode) code {
+[data-theme="dark"] main.content pre:not(.sourceCode):not(.output pre) code {
     color: var(--text-secondary);
 }
 
@@ -1250,6 +1251,7 @@ main.content .quarto-copy-wrap {
 main.content div.sourceCode:has(> .quarto-copy-btn) > pre,
 main.content .quarto-copy-wrap > pre {
     min-height: calc(var(--spacing-11) + 2 * var(--spacing-2));
+    align-content: center;
 }
 
 div.sourceCode:hover .quarto-copy-btn,
