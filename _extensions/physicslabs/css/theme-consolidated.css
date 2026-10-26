@@ -804,6 +804,15 @@
     --status-pending-color: #f57c00;                  /* Orange */
     --status-checked-out-color: var(--blue-600);      /* Blue */
 
+    /* ===== MEETING POLLS ===== */
+    /* An answer on the poll grid (meet/css/meet.css): Yes is solid green, If
+       need be is stripes, a pattern so it never rests on colour alone. The
+       group heatmap mixes --meet-yes into the page background, stronger as more
+       of the group can make it. Green-600 is 5.1:1 on white, the stripe 3.3:1. */
+    --meet-yes: var(--green-600);
+    --meet-maybe-stripe: var(--yellow-900);
+    --meet-maybe-bg: var(--yellow-50);
+
     /* ===== INLINE COLOR OVERRIDES ===== */
     /* For replacing hardcoded inline styles */
     --inline-white: #ffffff;
@@ -1170,6 +1179,12 @@
     --warning-box-bg: #4d3d00;
     --warning-box-border: #ffc107;
     --warning-box-text: #ffe066;
+
+    /* ===== MEETING POLLS (Dark Mode) ===== */
+    /* Light green: mixed into the dark page, green-600's heatmap steps were too
+       close to tell apart */
+    --meet-yes: var(--green-100);
+    --meet-maybe-bg: var(--yellow-800);
 
     /* ===== SAFETY WARNINGS (Dark Mode) ===== */
     --safety-danger-bg: rgba(220, 38, 38, 0.10);
