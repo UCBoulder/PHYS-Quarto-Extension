@@ -465,12 +465,14 @@
     --btn-success-hover-bg: var(--green-800);
     --btn-success-hover-text: var(--ucb-white);
 
-    /* Danger Button */
+    /* Danger Button: white text, 4.53:1 on --color-danger and 5.61:1 on the
+       hover and focus fill. Black text was 4.64:1 at rest but 3.74:1 on
+       --color-danger-dark, failing AA on hover and keyboard focus (2026-10-26). */
     --btn-danger-bg: var(--color-danger);
-    --btn-danger-text: var(--ucb-black);
+    --btn-danger-text: var(--ucb-white);
     --btn-danger-border: var(--color-danger);
     --btn-danger-hover-bg: var(--color-danger-dark);
-    --btn-danger-hover-text: var(--ucb-black);
+    --btn-danger-hover-text: var(--ucb-white);
     --btn-danger-active-bg: var(--color-danger-dark);
 
     /* Info Button — dark teal fill so white text clears 4.5:1. The old
